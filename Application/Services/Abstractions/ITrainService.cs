@@ -1,0 +1,11 @@
+﻿using Application.DTOs.TrainDTOs;
+using Domain.Common;
+
+namespace Application.Services.Abstractions;
+
+public interface ITrainService
+{
+    Task<ServiceResponse<GetTrainDTO>> GetTrainByID(int id);
+    Task<ServiceResponse<int>> AddTrain(AddTrainDTO addTrainDTO);
+    Task<ServiceResponse<bool>> RemoveTrain(int id);
+}
