@@ -1,6 +1,6 @@
-﻿using Application.DTOs.TrainDTOs;
+﻿using Application.Abstractions;
+using Application.DTOs.TrainDTOs;
 using Application.Services.Abstractions;
-using Domain.Abstractions;
 using Domain.Common;
 using Domain.Entities;
 
@@ -20,40 +20,50 @@ public class TrainService : ITrainService
     #endregion
 
     #region Methods
+    public async Task<ServiceResponse<bool>> RemoveTrain(int id)
+    {
+        var response = new ServiceResponse<bool>();
+
+        bool isTrainRemoved = await _trainRepository.RemoveTrain(id);
+        
+        if (isTrainRemoved)
+        {
+            response.IsSuccess = true;
+            response.Data = true;
+        }
+        else
+        {
+            response.IsSuccess = false;
+            response.ErrorMessage = $"Error removing train with an id : {id}";
+        }
+
+        return response;
+    }
+
     public async Task<ServiceResponse<GetTrainDTO>> GetTrainByID(int id)
     {
         var response = new ServiceResponse<GetTrainDTO>();
 
-        try
+        var train = await _trainRepository.GetTrainByID(id);
+
+        if (train == null)
         {
-            var train = await _trainRepository.GetTrainByID(id);
-
-            if (train == null)
-            {
-                response.ErrorMessage = "Train returned as null";
-                response.IsSuccess = false;    
-            }
-            else
-            {
-                var trainDTO = new GetTrainDTO()
-                {
-                    TrainId = train.TrainId,
-                    TrainName = train.TrainName,
-                    TrainNumber = train.TrainNumber
-                };
-
-                response.IsSuccess = true;
-                response.Data = trainDTO;
-            }
-
-            
+            response.ErrorMessage = "Train returned as null";
+            response.IsSuccess = false;    
         }
-        catch (Exception msg)
+        else
         {
-            response.ErrorMessage = $"An error occured : {msg}";
-            response.IsSuccess = false;
-        }
+            var trainDTO = new GetTrainDTO()
+            {
+                TrainId = train.TrainId,
+                TrainName = train.TrainName,
+                TrainNumber = train.TrainNumber
+            };
         
+            response.IsSuccess = true;
+            response.Data = trainDTO;
+        }
+
         return response;
     }
 
@@ -61,59 +71,50 @@ public class TrainService : ITrainService
     {
         var response = new ServiceResponse<int>();
 
-        try
+        var train = new Train()
         {
-            var train = new Train()
-            {
-                TrainName = addTrainDTO.TrainName,
-                TrainNumber = addTrainDTO.TrainNumber
-            };
-
-            int? addedTrainId = await _trainRepository.AddTrain(train);
-
-            if (addedTrainId != null || addedTrainId > 0)
-            {
-                response.IsSuccess = true;
-                response.Data = (int)addedTrainId;
-            }
-            else
-            {
-                response.ErrorMessage = "Error adding train to database, train id either null or less then 0 returned";
-                response.IsSuccess = false;
-            }
+            TrainName = addTrainDTO.TrainName,
+            TrainNumber = addTrainDTO.TrainNumber
+        };
+        
+        int? addedTrainId = await _trainRepository.AddTrain(train);
+        
+        if (addedTrainId != null || addedTrainId > 0)
+        {
+            response.IsSuccess = true;
+            response.Data = (int)addedTrainId;
         }
-        catch (Exception msg)
+        else
         {
+            response.ErrorMessage = "Error adding train to database, train id either null or less then 0 returned";
             response.IsSuccess = false;
-            response.ErrorMessage = $"Error occured : {msg}";
         }
 
         return response;
     }
 
-    public async Task<ServiceResponse<bool>> RemoveTrain(int id)
+    public async Task<ServiceResponse<bool>> UpdateTrain(UpdateTrainDTO updateTrainDTO)
     {
         var response = new ServiceResponse<bool>();
 
-        try
+        var train = new Train
         {
-            bool isTrainRemoved = await _trainRepository.RemoveTrain(id);
+            TrainId = updateTrainDTO.TrainId,
+            TrainName = updateTrainDTO.TrainName,
+            TrainNumber = updateTrainDTO.TrainNumber
+        };
 
-            if (isTrainRemoved)
-            {
-                response.IsSuccess = true;
-                response.Data = true;
-            }
-            else
-            {
-                response.IsSuccess = false;
-                response.ErrorMessage = $"Error removing train with an id : {id}";
-            }
+        bool isTrainEdited = await _trainRepository.UpdateTrain(train);
+
+        if (isTrainEdited)
+        {
+            response.IsSuccess = true;
+            response.Data = true;
         }
-        catch (Exception msg)
+        else
         {
             response.IsSuccess = false;
-            response.ErrorMessage = $"Error occured while deleting train from database : {msg}";
+            response.ErrorMessage = "Error occured while updating train";
         }
 
         return response;

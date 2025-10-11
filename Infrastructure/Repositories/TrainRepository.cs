@@ -1,4 +1,4 @@
-﻿using Domain.Abstractions;
+﻿using Application.Abstractions;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +48,6 @@ public class TrainRepository : ITrainRepository
         return result;
     }
 
-
     public async Task<Train?> GetTrainByID(int id)
     {
         var result = new Train();
@@ -58,6 +57,27 @@ public class TrainRepository : ITrainRepository
         return result;
     }
 
+    public async Task<bool> UpdateTrain(Train train)
+    {
+        var result = default(bool);
 
+        var targetTrain = await _dbContext.Trains
+            .FirstOrDefaultAsync(t => t.TrainId == train.TrainId);
+
+        if (targetTrain != null)
+        {
+            targetTrain.TrainName = train.TrainName == string.Empty
+                ? targetTrain.TrainName
+                : train.TrainName;
+
+            targetTrain.TrainNumber = train.TrainNumber ?? targetTrain.TrainNumber;
+
+            result = true;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        return result;
+    }
     #endregion
 }

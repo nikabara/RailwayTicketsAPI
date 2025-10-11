@@ -1,6 +1,6 @@
-﻿namespace Domain.Entities;
+﻿namespace Application.DTOs.TrainScheduleDTO;
 
-public class TrainSchedule
+public class GetTrainScheduleDTO
 {
     #region Properties
     public int TrainScheduleId { get; set; }
@@ -9,9 +9,5 @@ public class TrainSchedule
     public string? ArrivalAt { get; set; } = string.Empty;
     public DateTime? DepartureDate { get; set; }
     public DateTime? ArrivalDate { get; set; }
-    #endregion
-
-    #region Configuration Properties
-    public virtual Train Train { get; set; } = new();
     #endregion
 }

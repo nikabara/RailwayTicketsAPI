@@ -1,6 +1,6 @@
+using Application.Abstractions;
 using Application.Services.Abstractions;
 using Application.Services.Implementations;
-using Domain.Abstractions;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +39,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddScoped<ITrainService, TrainService>();
 
 builder.Services.AddScoped<ITrainRepository, TrainRepository>();
+
+builder.Services.AddScoped<ITrainScheduleRepository, TrainScheduleRepository>();
+
+builder.Services.AddScoped<ITrainScheduleService, TrainScheduleService>();
 
 #endregion
 

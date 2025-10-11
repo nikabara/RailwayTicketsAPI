@@ -21,7 +21,7 @@ namespace RailwayTicketsAPI.Controllers
         #endregion
 
         #region Actions
-        [HttpGet("{trainId:int}")]
+        [HttpGet("get-train/{trainId:int}")]
         public async Task<ActionResult<ServiceResponse<GetTrainDTO>>> GetTrain(int trainId)
         {
             var response = await _trainService.GetTrainByID(trainId);
@@ -51,10 +51,27 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
-        [HttpDelete("remove-train")]
+        [HttpDelete("remove-train/{trainId:int}")]
         public async Task<ActionResult<ServiceResponse<bool>>> RemoveTrain(int trainId)
         {
             var response = await _trainService.RemoveTrain(trainId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPut("update-train")]
+        public async Task<ActionResult<ServiceResponse<bool>>> UpdateTrain(UpdateTrainDTO updateTrainDTO)
+        {
+            var response = new ServiceResponse<bool>();
+
+            response = await _trainService.UpdateTrain(updateTrainDTO);
 
             if (response.IsSuccess)
             {
