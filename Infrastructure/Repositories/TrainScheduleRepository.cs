@@ -43,18 +43,24 @@ public class TrainScheduleRepository : ITrainScheduleRepository
 
     public async Task<bool> RemoveTrainSchedule(int id)
     {
+        var result = default(bool);
+
         var trainScheduleToDelete = await _dbContext.TrainSchedule.FirstOrDefaultAsync(t => t.TrainScheduleId == id);
 
         if (trainScheduleToDelete == null)
         {
-            return false;
+            result = false;
+        }
+        else
+        {
+            _dbContext.TrainSchedule.Remove(trainScheduleToDelete);
+
+            int rowsAffected = await _dbContext.SaveChangesAsync();
+
+            result = rowsAffected > 0;
         }
 
-        _dbContext.TrainSchedule.Remove(trainScheduleToDelete);
-
-        int affectedRowCount = await _dbContext.SaveChangesAsync();
-
-        return affectedRowCount > 0;
+        return result;
     }
 
     public async Task<bool> UpdateTrainSchedule(TrainSchedule trainSchedule)

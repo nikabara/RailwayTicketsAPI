@@ -22,18 +22,24 @@ public class TrainRepository : ITrainRepository
     #region Methods
     public async Task<bool> RemoveTrain(int id)
     {
+        var result = default(bool);
+
         var trainToDelete = await _dbContext.Trains.FirstOrDefaultAsync(t => t.TrainId == id);
 
         if (trainToDelete == null)
         {
-            return false;
+            result = false;
+        }
+        else
+        {
+            _dbContext.Trains.Remove(trainToDelete);
+
+            int rowsAffected = await _dbContext.SaveChangesAsync();
+
+            result = rowsAffected > 0;
         }
 
-        _dbContext.Trains.Remove(trainToDelete);
-
-        int affectedRowCount = await _dbContext.SaveChangesAsync();
-
-        return affectedRowCount > 0;
+        return result;
     }
 
     public async Task<int?> AddTrain(Train train)

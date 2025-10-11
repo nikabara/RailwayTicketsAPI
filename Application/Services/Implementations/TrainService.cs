@@ -79,7 +79,7 @@ public class TrainService : ITrainService
         
         int? addedTrainId = await _trainRepository.AddTrain(train);
         
-        if (addedTrainId != null || addedTrainId > 0)
+        if (addedTrainId != null && addedTrainId > 0)
         {
             response.IsSuccess = true;
             response.Data = (int)addedTrainId;

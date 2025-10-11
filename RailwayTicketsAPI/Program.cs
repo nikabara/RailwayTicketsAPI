@@ -44,6 +44,10 @@ builder.Services.AddScoped<ITrainScheduleRepository, TrainScheduleRepository>();
 
 builder.Services.AddScoped<ITrainScheduleService, TrainScheduleService>();
 
+builder.Services.AddScoped<IVagonRepository, VagonRepository>();
+
+builder.Services.AddScoped<IVagonService, VagonService>();
+
 #endregion
 
 var app = builder.Build();

@@ -8,7 +8,7 @@ public class Vagon
     #region Properties
     [Key]
     public int VagonId { get; set; }
-    public int TrainId { get; set; }
+    public int? TrainId { get; set; }
     public VagonType VagonType { get; set; }
     #endregion
 
