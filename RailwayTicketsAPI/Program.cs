@@ -2,6 +2,8 @@ using Application.Abstractions;
 using Application.Services.Abstractions;
 using Application.Services.Implementations;
 using Infrastructure.Data;
+using Infrastructure.ExternalServices.EmailSendingService.Abstractions;
+using Infrastructure.ExternalServices.EmailSendingService.Implementations;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +53,12 @@ builder.Services.AddScoped<IVagonService, VagonService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+
+#endregion
+
+#region External service registrations
+
+builder.Services.AddScoped<ISMTPEmailSender, SMTPEmailSender>();
 
 #endregion
 

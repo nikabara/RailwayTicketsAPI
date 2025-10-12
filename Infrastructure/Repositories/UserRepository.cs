@@ -41,6 +41,15 @@ public class UserRepository : IUserRepository
         return result;
     }
 
+    public async Task<User?> GetUserByEmail(string email)
+    {
+        var result = new User();
+
+        result = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        return result;
+    }
+
     public async Task<bool> RemoveUser(int id)
     {
         var result = default(bool);

@@ -20,10 +20,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="BusinessLogics\" />
-    <Folder Include="ExternalServices\EmailSendingService\Abstractions\" />
-    <Folder Include="ExternalServices\EmailSendingService\Implementations\" />
-  </ItemGroup>
-
 </Project>
