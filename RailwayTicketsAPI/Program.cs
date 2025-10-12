@@ -48,6 +48,10 @@ builder.Services.AddScoped<IVagonRepository, VagonRepository>();
 
 builder.Services.AddScoped<IVagonService, VagonService>();
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+
 #endregion
 
 var app = builder.Build();

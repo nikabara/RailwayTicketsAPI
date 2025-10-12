@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Application.DTOs.UserDTO;
 
-namespace Domain.Entities;
-
-public class User
+public class GetUserDTO
 {
-    #region Properties
-    [Key]
     public int UserId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
@@ -18,9 +14,4 @@ public class User
     public DateTime RegistrationDate { get; set; }
     public bool IsVerified { get; set; } = false;
     public bool IsAdmin { get; set; } = false;
-    #endregion
-
-    #region Configuation Properties 
-    public virtual ICollection<Ticket> Tickets { get; set; } = [];
-    #endregion
 }
