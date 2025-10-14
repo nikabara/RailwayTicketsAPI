@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions;
+using Application.ExternalServices.EmailSendingService.Abstractions;
 using Domain.Entities;
-using Infrastructure.ExternalServices.EmailSendingService.Abstractions;
 
 namespace Infrastructure.BusinessLogics;
 

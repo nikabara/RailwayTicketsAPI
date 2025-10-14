@@ -1,7 +1,7 @@
 ﻿using Application.Abstractions;
 using Application.DTOs.EmailDTOs;
+using Application.ExternalServices.EmailSendingService.Abstractions;
 using Infrastructure.BusinessLogics;
-using Infrastructure.ExternalServices.EmailSendingService.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RailwayTicketsAPI.Controllers
@@ -27,25 +27,23 @@ namespace RailwayTicketsAPI.Controllers
         [HttpPost("send-email")]
         public async Task<IActionResult> SendEmail(SendEmailDTO sendEmailDTO)
         {
-            var targetUser = await _userRepository.GetUserByEmail(sendEmailDTO.ToEmail);
+            SMTPEmailSendingBusinessLogic _smptEmailSendingBusinessLogic = new (
+                _userRepository, 
+                _smptEmailSender, 
+                sendEmailDTO.UserId, 
+                sendEmailDTO.Subject, 
+                sendEmailDTO.Message 
+            );
 
-            if (targetUser != null)
+            var result = await _smptEmailSendingBusinessLogic.Execute();
+
+            if (result.IsError)
             {
-                SMTPEmailSendingBusinessLogic _smptEmailSendingBusinessLogic = new (
-                    _userRepository, 
-                    _smptEmailSender, 
-                    targetUser.UserId, 
-                    sendEmailDTO.Subject, 
-                    sendEmailDTO.Message 
-                );
-
-                await _smptEmailSendingBusinessLogic.Execute();
-
-                return Ok("Email sent successfully.");
+                return BadRequest(result.ErrorMessage);
             }
             else
             {
-                return BadRequest("User with the specified email was not found.");
+                return Ok("Email was sent successfully");
             }
         }
         #endregion

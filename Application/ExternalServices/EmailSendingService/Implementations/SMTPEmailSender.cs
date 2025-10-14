@@ -1,11 +1,11 @@
-﻿using Infrastructure.ExternalServices.EmailSendingService.Abstractions;
+﻿using Application.ExternalServices.EmailSendingService.Abstractions;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Net;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
 
-namespace Infrastructure.ExternalServices.EmailSendingService.Implementations;
+namespace Application.ExternalServices.EmailSendingService.Implementations;
 
 public class SMTPEmailSender : ISMTPEmailSender
 {

@@ -1,11 +1,16 @@
 using Application.Abstractions;
+using Application.AuthServices.Abstractions;
+using Application.AuthServices.Implementations;
+using Application.ExternalServices.EmailSendingService.Abstractions;
+using Application.ExternalServices.EmailSendingService.Implementations;
 using Application.Services.Abstractions;
 using Application.Services.Implementations;
 using Infrastructure.Data;
-using Infrastructure.ExternalServices.EmailSendingService.Abstractions;
-using Infrastructure.ExternalServices.EmailSendingService.Implementations;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +64,41 @@ builder.Services.AddScoped<IUserService, UserService>();
 #region External service registrations
 
 builder.Services.AddScoped<ISMTPEmailSender, SMTPEmailSender>();
+
+#endregion
+
+#region Auth services
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+#endregion
+
+#region Builder auth service configuration
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+        .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    }
+);
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "Authorization, e.g. \"bearer {token}\"",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 #endregion
 
