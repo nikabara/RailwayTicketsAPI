@@ -71,7 +71,8 @@ public class AuthService : IAuthService
                 UserBalance = 0,
                 PhoneNumber = registerUserDTO.PhoneNumber,
                 PasswordSalt = passwordSalt,
-                PasswordHash = passwordHash
+                PasswordHash = passwordHash,
+                RegistrationDate = DateTime.Now
             };
 
             var createdUserId = await _userRepository.AddUser(newUser);

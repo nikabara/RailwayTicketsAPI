@@ -1,10 +1,12 @@
 ﻿using Application.DTOs.UserDTO;
 using Application.Services.Abstractions;
 using Domain.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RailwayTicketsAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
