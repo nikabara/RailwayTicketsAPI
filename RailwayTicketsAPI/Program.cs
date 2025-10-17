@@ -1,10 +1,10 @@
 using Application.Abstractions;
-using Application.AuthServices.Abstractions;
-using Application.AuthServices.Implementations;
-using Application.ExternalServices.EmailSendingService.Abstractions;
-using Application.ExternalServices.EmailSendingService.Implementations;
-using Application.Services.Abstractions;
-using Application.Services.Implementations;
+using Application.Services.AuthServices.Abstractions;
+using Application.Services.AuthServices.Implementations;
+using Application.Services.EntityServices.Abstractions;
+using Application.Services.EntityServices.Implementations;
+using Application.Services.ExternalServices.EmailSendingService.Abstractions;
+using Application.Services.ExternalServices.EmailSendingService.Implementations;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -58,6 +58,10 @@ builder.Services.AddScoped<IVagonService, VagonService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
+
+builder.Services.AddScoped<IVerificationCodeService, VerificationCodeService>();
 
 #endregion
 

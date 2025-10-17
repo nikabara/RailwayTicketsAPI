@@ -1,5 +1,5 @@
-﻿using Application.AuthServices.Abstractions;
-using Application.DTOs.AuthDTOs;
+﻿using Application.DTOs.AuthDTOs;
+using Application.Services.AuthServices.Abstractions;
 using Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +41,21 @@ namespace RailwayTicketsAPI.Controllers
         {
             var response = await _authService.RegisterUser(registerUserDTO);
             
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response + " " + response.ErrorMessage);
+            }
+        }
+
+        [HttpPost("send-verification-code")]
+        public async Task<ActionResult<ServiceResponse<int?>>> SendVerificationCode(int userId)
+        {
+            var response = await _authService.SendVerificationCode(userId);
+
             if (response.IsSuccess)
             {
                 return Ok(response);

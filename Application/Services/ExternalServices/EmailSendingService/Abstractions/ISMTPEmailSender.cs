@@ -1,4 +1,4 @@
-﻿namespace Application.ExternalServices.EmailSendingService.Abstractions;
+﻿namespace Application.Services.ExternalServices.EmailSendingService.Abstractions;
 
 public interface ISMTPEmailSender
 {

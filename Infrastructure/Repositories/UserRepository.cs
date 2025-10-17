@@ -96,7 +96,7 @@ public class UserRepository : IUserRepository
                 : user.Age;
 
             targetUser.Email = user.Email == string.Empty
-                ? targetUser.Email 
+                ? targetUser.Email
                 : user.Email;
 
             targetUser.PhoneNumber = !string.IsNullOrWhiteSpace(user.PhoneNumber)
@@ -105,6 +105,28 @@ public class UserRepository : IUserRepository
 
             result = true;
 
+            await _dbContext.SaveChangesAsync();
+        }
+
+        return result;
+    }
+
+    public async Task<bool> MakeUserAdmin(int id)
+    {
+        var result = default(bool);
+
+        var targetUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
+
+        if (targetUser == null || targetUser.IsAdmin == true || targetUser.IsVerified == false)
+        {
+            result = false;
+        }
+        else
+        {
+            targetUser.IsAdmin = true;
+            
+            result = true;
+            
             await _dbContext.SaveChangesAsync();
         }
 

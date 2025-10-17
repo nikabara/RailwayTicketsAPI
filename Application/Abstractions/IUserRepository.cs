@@ -9,4 +9,5 @@ public interface IUserRepository
     public Task<User?> GetUserByEmail(string email);
     public Task<int?> AddUser(User user);
     public Task<bool> UpdateUser(User user);
+    public Task<bool> MakeUserAdmin(int id);
 }

@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.TrainScheduleDTO;
-using Application.Services.Abstractions;
+using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

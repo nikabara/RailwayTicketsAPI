@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.UserDTO;
-using Application.Services.Abstractions;
+using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,7 @@ namespace RailwayTicketsAPI.Controllers
         #endregion
 
         #region Endpoints
-        [HttpPost("add-user")]
+        [HttpPost("admin/add-user")]
         public async Task<ActionResult<ServiceResponse<int>>> AddUser(AddUserDTO addUserDTO)
         {
             var response = await _userService.AddUser(addUserDTO);
@@ -38,7 +38,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
-        [HttpGet("get-user/{userId:int}")]
+        [HttpGet("admin/get-user/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<GetUserDTO>>> GetUser(int userId)
         {
             var response = await _userService.GetUserByID(userId);
@@ -53,7 +53,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
-        [HttpDelete("delete-user/{userId:int}")]
+        [HttpDelete("admin/delete-user/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<bool>>> DeleteUser(int userId)
         {
             var response = await _userService.RemoveUser(userId);
@@ -68,7 +68,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
-        [HttpPut("update-user")]
+        [HttpPut("admin/update-user")]
         public async Task<ActionResult<ServiceResponse<bool>>> UpdateUser(UpdateUserDTO updateUserDTO)
         {
             var response = await _userService.UpdateUser(updateUserDTO);

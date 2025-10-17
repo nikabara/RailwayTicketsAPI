@@ -1,10 +1,10 @@
 ﻿using Application.Abstractions;
 using Application.DTOs.UserDTO;
-using Application.Services.Abstractions;
+using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Domain.Entities;
 
-namespace Application.Services.Implementations;
+namespace Application.Services.EntityServices.Implementations;
 
 public class UserService : IUserService
 {
@@ -137,6 +137,26 @@ public class UserService : IUserService
         {
             response.IsSuccess = false;
             response.ErrorMessage = $"Error updating user {user.Name} {user.LastName} email : {user.Email}";
+        }
+
+        return response;
+    }
+
+    public async Task<ServiceResponse<bool>> MakeUserAdmin(int userId)
+    {
+        var response = new ServiceResponse<bool>();
+
+        bool becameAdmin = await _userRepository.MakeUserAdmin(userId);
+
+        if (becameAdmin == true)
+        {
+            response.IsSuccess = true;
+            response.Data = true;
+        }
+        else
+        {
+            response.IsSuccess = false;
+            response.ErrorMessage = $"Error making user with id : {userId} an admin";
         }
 
         return response;

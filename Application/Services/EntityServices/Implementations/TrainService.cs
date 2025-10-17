@@ -1,10 +1,10 @@
 ﻿using Application.Abstractions;
 using Application.DTOs.TrainDTOs;
-using Application.Services.Abstractions;
+using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Domain.Entities;
 
-namespace Application.Services.Implementations;
+namespace Application.Services.EntityServices.Implementations;
 
 public class TrainService : ITrainService
 {

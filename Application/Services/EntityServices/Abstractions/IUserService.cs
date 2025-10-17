@@ -1,7 +1,7 @@
 ﻿using Application.DTOs.UserDTO;
 using Domain.Common;
 
-namespace Application.Services.Abstractions;
+namespace Application.Services.EntityServices.Abstractions;
 
 public interface IUserService
 {
@@ -9,4 +9,5 @@ public interface IUserService
     public Task<ServiceResponse<int?>> AddUser(AddUserDTO addUserDTO);
     public Task<ServiceResponse<bool>> RemoveUser(int id);
     public Task<ServiceResponse<bool>> UpdateUser(UpdateUserDTO updateUserDTO);
+    public Task<ServiceResponse<bool>> MakeUserAdmin(int userId);
 }

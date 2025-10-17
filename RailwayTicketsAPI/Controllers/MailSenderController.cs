@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions;
 using Application.DTOs.EmailDTOs;
-using Application.ExternalServices.EmailSendingService.Abstractions;
+using Application.Services.ExternalServices.EmailSendingService.Abstractions;
 using Infrastructure.BusinessLogics;
 using Microsoft.AspNetCore.Mvc;
 

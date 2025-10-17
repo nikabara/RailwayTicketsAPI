@@ -1,7 +1,7 @@
 ﻿using Application.DTOs.AuthDTOs;
 using Domain.Common;
 
-namespace Application.AuthServices.Abstractions;
+namespace Application.Services.AuthServices.Abstractions;
 
 public interface IAuthService
 {

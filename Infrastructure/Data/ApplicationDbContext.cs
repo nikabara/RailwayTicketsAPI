@@ -20,4 +20,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<Vagon> Vagons { get; set; }
     public DbSet<TrainSchedule> TrainSchedule { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<VerificationCode> VerificationCodes { get; set; }
 }

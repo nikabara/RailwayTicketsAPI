@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions;
-using Application.ExternalServices.EmailSendingService.Abstractions;
+using Application.Services.ExternalServices.EmailSendingService.Abstractions;
 using Domain.Entities;
 
 namespace Infrastructure.BusinessLogics;

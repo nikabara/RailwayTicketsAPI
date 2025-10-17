@@ -1,7 +1,7 @@
 ﻿using Application.DTOs.TrainDTOs;
 using Domain.Common;
 
-namespace Application.Services.Abstractions;
+namespace Application.Services.EntityServices.Abstractions;
 
 public interface ITrainService
 {

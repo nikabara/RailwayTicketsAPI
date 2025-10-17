@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.VagonDTO;
-using Application.Services.Abstractions;
+using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 
