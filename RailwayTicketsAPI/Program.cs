@@ -63,6 +63,8 @@ builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeReposito
 
 builder.Services.AddScoped<IVerificationCodeService, VerificationCodeService>();
 
+builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
+
 #endregion
 
 #region External service registrations

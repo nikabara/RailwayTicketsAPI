@@ -21,4 +21,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<TrainSchedule> TrainSchedule { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<VerificationCode> VerificationCodes { get; set; }
+    public DbSet<EmailTemplate> EmailTemplates { get; set; }
 }

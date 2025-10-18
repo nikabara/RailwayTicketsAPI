@@ -61,7 +61,7 @@ public class SMTPEmailSendingBusinessLogic
 
     async Task SendEmail()
     {
-        await _smptEmailSender.SendEmail(_user.Email, _emailSubject, _emailMessage);
+        await _smptEmailSender.SendEmail(_user.Email, _emailSubject, _emailMessage, "template_VerificationCodeEmail#1");
     }
     #endregion
 
