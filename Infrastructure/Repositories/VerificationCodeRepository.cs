@@ -1,6 +1,9 @@
 ﻿using Application.Abstractions;
 using Domain.Entities;
 using Infrastructure.Data;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Infrastructure.Repositories;
 
@@ -31,9 +34,31 @@ public class VerificationCodeRepository : IVerificationCodeRepository
         return result;
     }
 
-    public Task<VerificationCode?> GetVerificationCodeByID(int id)
+    public async Task<VerificationCode?> GetVerificationCode(Expression<Func<VerificationCode, bool>> expression)
     {
-        throw new NotImplementedException();
+        var result = new VerificationCode();
+
+        result = await _dbContext.VerificationCodes
+            .Where(expression)
+            .OrderByDescending(v => v.ExpirationDate)
+            .FirstOrDefaultAsync();
+
+        return result;
+    }
+
+    public async Task<bool> MarkVerificationCodeAsUsed(int verificationCodeId)
+    {
+        var targetVerificationCode = await _dbContext.VerificationCodes
+            .FirstOrDefaultAsync(v => v.VerificationCodeId == verificationCodeId);
+
+        if (targetVerificationCode != null)
+        {
+            targetVerificationCode.IsUsed = true;
+        }
+
+        int rowsAffected = await _dbContext.SaveChangesAsync();
+
+        return rowsAffected > 0;
     }
 
     public Task<bool> RemoveVerificationCode(int id)

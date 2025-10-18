@@ -145,9 +145,65 @@ public class AuthService : IAuthService
         return response;
     }
 
-    public Task<ServiceResponse<bool>> VerifyVerificationCode(string email, string code)
+    public async Task<ServiceResponse<bool>> VerifyVerificationCode(string email, string code)
     {
-        throw new NotImplementedException();
+        var result = new ServiceResponse<bool>();
+
+        var verificationCode = await _verificationCodeRepository
+            .GetVerificationCode(v => v.Email == email && v.Code == code && !v.IsUsed);
+
+        bool isActive = verificationCode == null ? false : verificationCode!.IsActive();
+
+        if (verificationCode == null || verificationCode.Code != code)
+        {
+            result.ErrorMessage = "Verification code is not correct";
+            result.IsSuccess = false;
+            result.Data = false;
+        }
+        else if (!isActive)
+        {
+            result.ErrorMessage = "Verification code is expired";
+            result.IsSuccess = false;
+            result.Data = false;
+        }
+        else
+        {
+            var targetUser = await _userRepository.GetUserByEmail(email);
+
+            if (targetUser != null && !targetUser.IsVerified)
+            {
+                bool isUserVerified  = await _userRepository.UpdateUser(new User 
+                {
+                    UserId = targetUser.UserId,
+                    IsVerified = true 
+                });
+
+                if (isUserVerified)
+                {
+                    bool verificationCodeMarkedUsed = await _verificationCodeRepository
+                        .MarkVerificationCodeAsUsed(verificationCode.VerificationCodeId);
+
+                    if (verificationCodeMarkedUsed)
+                    {
+                        result.IsSuccess = true;
+                        result.Data = true;
+                    }
+                }
+            }
+            else if (targetUser!.IsVerified)
+            {
+                result.IsSuccess = false;
+                result.Data = false;
+                result.ErrorMessage = "User is already verified";
+            }
+            else
+            {
+                result.IsSuccess = false;
+                result.Data = false;
+            }
+        }
+
+        return result;
     }
     #endregion
 }

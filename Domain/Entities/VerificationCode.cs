@@ -7,4 +7,6 @@ public class VerificationCode
     public string Code { get; set; } = string.Empty;
     public DateTime ExpirationDate { get; set; }
     public bool IsUsed { get; set; } = false;
+
+    public bool IsActive() => !IsUsed && DateTime.Now < ExpirationDate; 
 }

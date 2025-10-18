@@ -103,6 +103,10 @@ public class UserRepository : IUserRepository
                 ? user.PhoneNumber
                 : targetUser.PhoneNumber;
 
+            targetUser.IsVerified = user.IsVerified == default
+                ? targetUser.IsVerified
+                : user.IsVerified;
+
             result = true;
 
             await _dbContext.SaveChangesAsync();

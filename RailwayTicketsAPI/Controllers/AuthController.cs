@@ -51,10 +51,25 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
-        [HttpPost("send-verification-code")]
+        [HttpPost("send-verification-code/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<int?>>> SendVerificationCode(int userId)
         {
             var response = await _authService.SendVerificationCode(userId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response + " " + response.ErrorMessage);
+            }
+        }
+
+        [HttpPost("verify-verification-code")]
+        public async Task<ActionResult<ServiceResponse<bool>>> VerifyVerificationCode(string email, string code)
+        {
+            var response = await _authService.VerifyVerificationCode(email, code);
 
             if (response.IsSuccess)
             {
