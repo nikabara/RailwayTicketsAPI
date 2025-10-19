@@ -51,6 +51,12 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
+        [HttpPost("reset-password")]
+        public async Task<ActionResult<ServiceResponse<bool>>> ResetPassword(string email, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost("send-verification-code/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<int?>>> SendVerificationCode(int userId)
         {

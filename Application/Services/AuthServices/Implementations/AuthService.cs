@@ -50,6 +50,10 @@ public class AuthService : IAuthService
         {
             response.Data = Utilities.GenerateToken(_configuration, targetUser);
             response.IsSuccess = true;
+
+            var emailSendingBL = new SMTPEmailSendingBusinessLogic(_userRepository, _smtpEmailSender, targetUser.UserId, "AUTHORIZATION", "Log in was successful");
+
+            var emailSendingResult = await emailSendingBL.Execute();
         }
 
         return response;
@@ -84,6 +88,10 @@ public class AuthService : IAuthService
             {
                 response.IsSuccess = true;
                 response.Data = (int)createdUserId;
+
+                var emailSendingBL = new SMTPEmailSendingBusinessLogic(_userRepository, _smtpEmailSender, (int)createdUserId, "AUTHORIZATION", "Registration was successful please log in");
+
+                var emailSendingResult = await emailSendingBL.Execute();
             }
             else
             {
@@ -98,6 +106,11 @@ public class AuthService : IAuthService
         }
 
         return response;
+    }
+    
+    public async Task<ServiceResponse<bool>> ResetPassword()
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<ServiceResponse<bool>> SendVerificationCode(int userID)
@@ -182,6 +195,10 @@ public class AuthService : IAuthService
                 {
                     bool verificationCodeMarkedUsed = await _verificationCodeRepository
                         .MarkVerificationCodeAsUsed(verificationCode.VerificationCodeId);
+
+                    var emailSendingBL = new SMTPEmailSendingBusinessLogic(_userRepository, _smtpEmailSender, targetUser.UserId, "AUTHORIZATION", "Verification was successful");
+
+                    var emailSendingResult = await emailSendingBL.Execute();
 
                     if (verificationCodeMarkedUsed)
                     {

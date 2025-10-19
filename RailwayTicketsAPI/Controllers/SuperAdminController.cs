@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RailwayTicketsAPI.Controllers
 {
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class SuperAdminController : ControllerBase
@@ -22,7 +22,7 @@ namespace RailwayTicketsAPI.Controllers
         #endregion
 
         #region Methods
-        [HttpPut("super-admin/register-admin/{userId:int}")]
+        [HttpPut("register-admin/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<bool>>> MakeAdmin(int userId)
         {
             var response = await _userService.MakeUserAdmin(userId);
