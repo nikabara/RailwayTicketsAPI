@@ -1,4 +1,6 @@
-﻿namespace Application.DTOs.UserDTO;
+﻿using Domain.Enums;
+
+namespace Application.DTOs.UserDTO;
 
 public class UpdateUserDTO
 {
@@ -8,4 +10,5 @@ public class UpdateUserDTO
     public int? Age { get; set; }
     public string? Email { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; } = string.Empty;
+    public UserRoleType? UserRoleType { get; set; }
 }

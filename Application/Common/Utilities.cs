@@ -38,11 +38,12 @@ public static class Utilities
             new Claim(UserClaimTypes.LastName, user.LastName),
             new Claim(UserClaimTypes.AgeClaim, user.Age.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+            new Claim(ClaimTypes.MobilePhone, user.PhoneNumber!),
             new Claim(UserClaimTypes.UserBalanceClaim, user.UserBalance.ToString()),
             new Claim(UserClaimTypes.RegistrationDateClaim, user.RegistrationDate.ToString()),
             new Claim(UserClaimTypes.IsVerifiedClaim, user.IsVerified.ToString()),
-            new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+            // new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User"),
+            new Claim(ClaimTypes.Role, user.UserRole.UserRoleName)
         };
 
         //if (user.PhoneNumber != string.Empty)

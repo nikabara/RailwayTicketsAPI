@@ -1,4 +1,6 @@
-﻿namespace Application.DTOs.UserDTO;
+﻿using Domain.Enums;
+
+namespace Application.DTOs.UserDTO;
 
 public class AddUserDTO
 {
@@ -11,6 +13,6 @@ public class AddUserDTO
     public byte[] PasswordSalt { get; set; } = [];
     public byte[] PasswordHash { get; set; } = [];
     public DateTime RegistrationDate { get; set; } = DateTime.Now;
+    public UserRoleType UserRoleType { get; set; }
     public bool IsVerified { get; set; } = false;
-    public bool IsAdmin { get; set; } = false;
 }

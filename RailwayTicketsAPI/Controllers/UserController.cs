@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RailwayTicketsAPI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase

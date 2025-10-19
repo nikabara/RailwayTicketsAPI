@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +37,7 @@ public class UserRepository : IUserRepository
     {
         var result = new User();
 
-        result = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
+        result = await _dbContext.Users.Include(u => u.UserRole).FirstOrDefaultAsync(u => u.UserId == id);
 
         return result;
     }
@@ -45,7 +46,7 @@ public class UserRepository : IUserRepository
     {
         var result = new User();
 
-        result = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        result = await _dbContext.Users.Include(u => u.UserRole).FirstOrDefaultAsync(u => u.Email == email);
 
         return result;
     }
@@ -107,6 +108,10 @@ public class UserRepository : IUserRepository
                 ? targetUser.IsVerified
                 : user.IsVerified;
 
+            targetUser.UserRoleId = user.UserRoleId == default
+                ? targetUser.UserRoleId
+                : user.UserRoleId;
+
             result = true;
 
             await _dbContext.SaveChangesAsync();
@@ -121,13 +126,13 @@ public class UserRepository : IUserRepository
 
         var targetUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
 
-        if (targetUser == null || targetUser.IsAdmin == true || targetUser.IsVerified == false)
+        if (targetUser == null || targetUser.UserRoleId == (int)UserRoleType.Admin || targetUser.IsVerified == false)
         {
             result = false;
         }
         else
         {
-            targetUser.IsAdmin = true;
+            targetUser.UserRoleId = (int)UserRoleType.Admin;
             
             result = true;
             

@@ -37,7 +37,7 @@ public class UserService : IUserService
             PasswordHash = addUserDTO.PasswordHash,
             RegistrationDate = addUserDTO.RegistrationDate,
             IsVerified = addUserDTO.IsVerified,
-            IsAdmin = addUserDTO.IsAdmin
+            UserRoleId = (int)addUserDTO.UserRoleType
         };
 
         int? addedUserId = await _userRepository.AddUser(user);
@@ -72,6 +72,7 @@ public class UserService : IUserService
             var userDTO = new GetUserDTO
             {
                 UserId = user.UserId,
+                UserRoleId = user.UserRoleId,
                 Name = user.Name,
                 LastName = user.LastName,
                 Age = user.Age,
@@ -81,8 +82,7 @@ public class UserService : IUserService
                 PasswordHash = user.PasswordHash,
                 PasswordSalt = user.PasswordSalt,
                 RegistrationDate = user.RegistrationDate,
-                IsVerified = user.IsVerified,
-                IsAdmin = user.IsAdmin
+                IsVerified = user.IsVerified
             };
 
             response.IsSuccess = true;
@@ -123,7 +123,8 @@ public class UserService : IUserService
             LastName = updateUserDTO.LastName!,
             Age = updateUserDTO.Age ?? default,
             PhoneNumber = updateUserDTO.PhoneNumber,
-            Email = updateUserDTO.Email!
+            Email = updateUserDTO.Email!,
+            UserRoleId = (int)updateUserDTO.UserRoleType
         };
 
         bool isUserEdited = await _userRepository.UpdateUser(user);
