@@ -1,10 +1,12 @@
 ﻿using Application.DTOs.VagonDTO;
 using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RailwayTicketsAPI.Controllers
 {
+    [Authorize("SuperAdmin,Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class VagonController : ControllerBase
@@ -27,6 +29,23 @@ namespace RailwayTicketsAPI.Controllers
             var response = new ServiceResponse<int?>();
 
             response = await _vagonService.AddVagon(addVagonDTO);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("add-vagon2")]
+        public async Task<ActionResult<ServiceResponse<int?>>> AddVagon2(AddVagonDTO addVagonDTO)
+        {
+            var response = new ServiceResponse<int?>();
+
+            response = await _vagonService.AddVagon2(addVagonDTO);
 
             if (response.IsSuccess)
             {

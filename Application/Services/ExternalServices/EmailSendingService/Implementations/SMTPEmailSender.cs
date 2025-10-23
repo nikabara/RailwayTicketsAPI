@@ -1,6 +1,5 @@
 ﻿using Application.Abstractions;
 using Application.Services.ExternalServices.EmailSendingService.Abstractions;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;

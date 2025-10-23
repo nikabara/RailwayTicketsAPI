@@ -77,6 +77,8 @@ public class VagonRepository : IVagonRepository
 
             targetVagon.VagonType = vagon.VagonType;
 
+            targetVagon.Capacity = vagon.Capacity ?? targetVagon.Capacity;
+
             result = true;
 
             await _dbContext.SaveChangesAsync();

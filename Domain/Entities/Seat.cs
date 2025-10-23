@@ -1,10 +1,13 @@
-﻿namespace Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain.Entities;
 
 public class Seat
 {
     #region Properties
+    [Key]
     public int SeatId { get; set; }
-    public int VagonId { get; set; }
+    public int? VagonId { get; set; }
     public string SeatNumber { get; set; } = string.Empty;
     public decimal SeatPrice { get; set; }
     public bool IsOccupied { get; set; }

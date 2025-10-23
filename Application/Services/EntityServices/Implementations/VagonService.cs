@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using Application.BusinessLogics;
 using Application.DTOs.VagonDTO;
 using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
@@ -11,13 +12,15 @@ public class VagonService : IVagonService
     #region Properties
     private readonly IVagonRepository _vagonRepository;
     private readonly ITrainRepository _trainRepository;
+    private readonly ISeatRepository _seatRepository;
     #endregion
 
     #region Constructors
-    public VagonService(IVagonRepository vagonRepository, ITrainRepository trainRepository)
+    public VagonService(IVagonRepository vagonRepository, ITrainRepository trainRepository, ISeatRepository seatRepository)
     {
         _vagonRepository = vagonRepository;
         _trainRepository = trainRepository;
+        _seatRepository = seatRepository;
     }
 
     #endregion
@@ -40,6 +43,7 @@ public class VagonService : IVagonService
             {
                 TrainId = vagonDTO.TrainId,
                 VagonType = vagonDTO.VagonType,
+                Capacity = vagonDTO.Capacity,
                 Train = targetTrain
             };
 
@@ -49,6 +53,55 @@ public class VagonService : IVagonService
             {
                 response.Data = addedVagonId;
                 response.IsSuccess = true;
+            }
+            else
+            {
+                response.ErrorMessage = "Error while adding vagon to database";
+                response.IsSuccess = false;
+            }
+        }
+
+        return response;
+    }
+    public async Task<ServiceResponse<int?>> AddVagon2(AddVagonDTO vagonDTO)
+    {
+        var response = new ServiceResponse<int?>();
+
+        var targetTrain = await _trainRepository.GetTrainByID(vagonDTO.TrainId);
+
+        if (targetTrain == null)
+        {
+            response.IsSuccess = false;
+            response.ErrorMessage = "No train with given Train Id was found";
+        }
+        else
+        {
+            var vagon = new Vagon
+            {
+                TrainId = vagonDTO.TrainId,
+                VagonType = vagonDTO.VagonType,
+                Capacity = vagonDTO.Capacity,
+                Train = targetTrain
+            };
+
+            int? addedVagonId = await _vagonRepository.AddVagon(vagon);
+
+            if (addedVagonId > 0 && addedVagonId != null)
+            {
+                var addVagonSeatsBL = new CreateVagonSeatsBusinessLogic(_seatRepository, _vagonRepository, (int)addedVagonId);
+
+                var result = await addVagonSeatsBL.Execute();
+
+                if (!result.IsError)
+                {
+                    response.Data = addedVagonId;
+                    response.IsSuccess = true;
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.ErrorMessage = result.ErrorMessage!;
+                }
             }
             else
             {
@@ -77,6 +130,7 @@ public class VagonService : IVagonService
             {
                 VagonId = vagon.VagonId,
                 TrainId = vagon.TrainId,
+                Capacity = vagon.Capacity,
                 VagonType = vagon.VagonType
             };
 
@@ -115,6 +169,7 @@ public class VagonService : IVagonService
         {
             VagonId = vagonDTO.VagonId,
             TrainId = vagonDTO.TrainId,
+            Capacity = vagonDTO.Capacity,
             VagonType = vagonDTO.VagonType
         };
 
