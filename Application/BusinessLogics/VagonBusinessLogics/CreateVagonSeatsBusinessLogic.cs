@@ -1,9 +1,9 @@
 ﻿using Application.Abstractions;
 using Domain.Entities;
 using Domain.Enums;
-using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.ObjectPool;
 
-namespace Application.BusinessLogics;
+namespace Application.BusinessLogics.VagonBusinessLogics;
 
 public class CreateVagonSeatsBusinessLogic
 {
@@ -83,13 +83,20 @@ public class CreateVagonSeatsBusinessLogic
                 await _seatRepository.AddSeat(new Seat
                 {
                     VagonId = _vagon.VagonId,
-                    SeatNumber = $"Seat{i + 1}",
+                    SeatNumber = getVagonSeatNumber(i),
                     SeatPrice = seatPrice,
                     IsOccupied = false,
                     Vagon = _vagon
                 });
             }
         }
+    }
+
+    private string getVagonSeatNumber(int index)
+    {
+        char[] letters = ['A', 'B', 'C', 'D'];
+
+        return $"{(index / 4) + 1}{letters[index % 4]}";
     }
     #endregion
 

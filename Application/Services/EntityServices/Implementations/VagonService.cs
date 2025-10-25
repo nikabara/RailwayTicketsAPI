@@ -1,9 +1,10 @@
 ﻿using Application.Abstractions;
-using Application.BusinessLogics;
+using Application.BusinessLogics.VagonBusinessLogics;
 using Application.DTOs.VagonDTO;
 using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Services.EntityServices.Implementations;
 
@@ -26,6 +27,12 @@ public class VagonService : IVagonService
     #endregion
 
     #region Methods
+    /// <summary>
+    /// This function automatically creates seats for the vagon after adding it to the database
+    /// [NOTE] to create vagon with no seats pass 0 as the value of Capacity
+    /// </summary>
+    /// <param name="vagonDTO"></param>
+    /// <returns></returns>
     public async Task<ServiceResponse<int?>> AddVagon(AddVagonDTO vagonDTO)
     {
         var response = new ServiceResponse<int?>();
@@ -35,54 +42,27 @@ public class VagonService : IVagonService
         if (targetTrain == null)
         {
             response.IsSuccess = false;
-            response.ErrorMessage = "No train with given Train Id was found";
+            response.ErrorMessage = "No train with given Train Id was found." + " ";
         }
         else
         {
-            var vagon = new Vagon
-            {
-                TrainId = vagonDTO.TrainId,
-                VagonType = vagonDTO.VagonType,
-                Capacity = vagonDTO.Capacity,
-                Train = targetTrain
-            };
+            var vagon = new Vagon();
 
-            int? addedVagonId = await _vagonRepository.AddVagon(vagon);
-
-            if (addedVagonId > 0 && addedVagonId != null)
+            if (Enum.IsDefined(vagonDTO.VagonType))
             {
-                response.Data = addedVagonId;
-                response.IsSuccess = true;
+                vagon = new Vagon
+                {
+                    TrainId = vagonDTO.TrainId,
+                    VagonType = vagonDTO.VagonType,
+                    Capacity = vagonDTO.Capacity,
+                    Train = targetTrain
+                };
             }
             else
             {
-                response.ErrorMessage = "Error while adding vagon to database";
                 response.IsSuccess = false;
+                response.ErrorMessage += $"VagonType {vagonDTO.VagonType} does not exist." + " ";
             }
-        }
-
-        return response;
-    }
-    public async Task<ServiceResponse<int?>> AddVagon2(AddVagonDTO vagonDTO)
-    {
-        var response = new ServiceResponse<int?>();
-
-        var targetTrain = await _trainRepository.GetTrainByID(vagonDTO.TrainId);
-
-        if (targetTrain == null)
-        {
-            response.IsSuccess = false;
-            response.ErrorMessage = "No train with given Train Id was found";
-        }
-        else
-        {
-            var vagon = new Vagon
-            {
-                TrainId = vagonDTO.TrainId,
-                VagonType = vagonDTO.VagonType,
-                Capacity = vagonDTO.Capacity,
-                Train = targetTrain
-            };
 
             int? addedVagonId = await _vagonRepository.AddVagon(vagon);
 
@@ -100,15 +80,17 @@ public class VagonService : IVagonService
                 else
                 {
                     response.IsSuccess = false;
-                    response.ErrorMessage = result.ErrorMessage!;
+                    response.ErrorMessage += result.ErrorMessage!;
                 }
             }
             else
             {
-                response.ErrorMessage = "Error while adding vagon to database";
+                response.ErrorMessage += "Error while adding vagon to database." + " ";
                 response.IsSuccess = false;
             }
         }
+
+        response.ErrorMessage = response.ErrorMessage.Trim();
 
         return response;
     }

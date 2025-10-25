@@ -24,10 +24,13 @@ public class VagonRepository : IVagonRepository
     {
         var result = default(int?);
 
-        await _dbContext.AddAsync(vagon);
-        await _dbContext.SaveChangesAsync();
+        if (vagon != null)
+        {
+            await _dbContext.AddAsync(vagon);
+            await _dbContext.SaveChangesAsync();
+        }
 
-        result = vagon.VagonId;
+        result = vagon!.VagonId;
 
         return result;
     }
