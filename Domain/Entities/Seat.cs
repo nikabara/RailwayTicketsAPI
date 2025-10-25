@@ -16,5 +16,6 @@ public class Seat
     #region Configuration Properties
     public virtual Vagon Vagon { get; set; } = new();
     public virtual List<Ticket> Tickets { get; set; } = new();
+    public virtual List<Transaction> Transactions { get; set; } = new();
     #endregion
 }

@@ -7,6 +7,7 @@ public class User
     #region Properties
     [Key]
     public int UserId { get; set; }
+    public int UserRoleId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public int Age { get; set; }
@@ -18,12 +19,13 @@ public class User
     public DateTime RegistrationDate { get; set; }
     public bool IsVerified { get; set; } = false;
     
-    // Custom user role
-    public int UserRoleId { get; set; }
+
     #endregion
 
     #region Configuation Properties 
     public virtual UserRole UserRole { get; set; } = new();
-    public virtual ICollection<Ticket> Tickets { get; set; } = [];
+    public virtual List<Ticket> Tickets { get; set; } = new();
+    public virtual List<UserCreditCard> UserCreditCards { get; set; } = new();
+    public virtual List<Transaction> Transactions { get; set; } = new();
     #endregion
 }

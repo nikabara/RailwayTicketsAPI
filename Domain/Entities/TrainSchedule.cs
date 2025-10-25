@@ -13,5 +13,6 @@ public class TrainSchedule
 
     #region Configuration Properties
     public virtual Train Train { get; set; } = new();
+    public virtual ICollection<Transaction> Transactions { get; set; } = [];
     #endregion
 }

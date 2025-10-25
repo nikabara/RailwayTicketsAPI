@@ -1,7 +1,6 @@
 ﻿using Application.Abstractions;
 using Domain.Entities;
 using Domain.Enums;
-using Microsoft.Extensions.ObjectPool;
 
 namespace Application.BusinessLogics.VagonBusinessLogics;
 
@@ -39,7 +38,7 @@ public class CreateVagonSeatsBusinessLogic
         return _result;
     }
 
-    public async Task InitBusinessLogicProperties()
+    private async Task InitBusinessLogicProperties()
     {
         var vagon = await _vagonRepository.GetVagonByID(_vagonId);
 
@@ -56,7 +55,7 @@ public class CreateVagonSeatsBusinessLogic
         }
     }
     
-    public async Task AddVagonSeatsToDB(int? seatCount)
+    private async Task AddVagonSeatsToDB(int? seatCount)
     {
         if (seatCount != null)
         {

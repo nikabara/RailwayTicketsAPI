@@ -4,10 +4,10 @@ public class Ticket
 {
     #region Properties
     public int TicketId { get; set; }
-    public int UserId { get; set; }
-    public int SeatId { get; set; }
-    public DateTime DateOfBooking { get; set; }
-    public decimal TicketPrice { get; set; }
+    public int? UserId { get; set; }
+    public int? SeatId { get; set; }
+    public DateTime? DateOfBooking { get; set; }
+    public decimal? TicketPrice { get; set; }
     #endregion
 
 

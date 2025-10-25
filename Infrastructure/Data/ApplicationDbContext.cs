@@ -23,4 +23,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<VerificationCode> VerificationCodes { get; set; }
     public DbSet<EmailTemplate> EmailTemplates { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<TransactionState> TransactionStates { get; set; }
+    public DbSet<Currency> Currencies { get; set; }
+    public DbSet<CreditCard> CreditCards { get; set; }
+    public DbSet<CreditCardIssuer> CreditCardIssuers { get; set; }
+    public DbSet<UserCreditCard> UserCreditCards { get; set; }
 }
