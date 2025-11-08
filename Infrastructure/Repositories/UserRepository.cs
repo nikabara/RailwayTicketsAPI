@@ -37,7 +37,10 @@ public class UserRepository : IUserRepository
     {
         var result = new User();
 
-        result = await _dbContext.Users.Include(u => u.UserRole).FirstOrDefaultAsync(u => u.UserId == id);
+        result = await _dbContext.Users
+            .Include(u => u.UserRole)
+            .Include(c => c.CreditCards)
+            .FirstOrDefaultAsync(u => u.UserId == id);
 
         return result;
     }
@@ -46,7 +49,10 @@ public class UserRepository : IUserRepository
     {
         var result = new User();
 
-        result = await _dbContext.Users.Include(u => u.UserRole).FirstOrDefaultAsync(u => u.Email == email);
+        result = await _dbContext.Users
+            .Include(u => u.UserRole)
+            .Include(u => u.CreditCards)
+            .FirstOrDefaultAsync(u => u.Email == email);
 
         return result;
     }

@@ -27,7 +27,7 @@ public class CreditCardRepository : ICreditCardRepository
 
         var rowsAffected = await _dbContext.SaveChangesAsync();
 
-        if (rowsAffected == 1)
+        if (rowsAffected > 0)
         {
             result = CreditCard.CreditCardId;
         }
@@ -39,10 +39,12 @@ public class CreditCardRepository : ICreditCardRepository
     {
         var result = new CreditCard();
 
-        var targetCreditCard = await _dbContext.CreditCards.Include(c => c.CreditCardIssuer)
+        result = await _dbContext.CreditCards
+            .Include(c => c.CreditCardIssuer)
+            .Include(u => u.Users)
             .FirstOrDefaultAsync(c => c.CreditCardId == id);
 
-        return targetCreditCard;
+        return result;
     }
 
     public async Task<bool> RemoveCreditCard(int id)
@@ -68,6 +70,23 @@ public class CreditCardRepository : ICreditCardRepository
         return result;
     }
 
+    public async Task<CreditCard?> GetCreditCardByInfo(string creditCardNumber, string cvv)
+    {
+        var result = default(CreditCard);
 
+        result = await _dbContext.CreditCards
+            .Include(u => u.Users)
+            .Include(c => c.CreditCardIssuer)
+            .FirstOrDefaultAsync(c => c.CreditCardNumber == creditCardNumber && c.CVV == cvv);
+
+        return result;
+    }
+
+    public async Task<int> UpdateCreditCard(CreditCard card)
+    {
+        _dbContext.CreditCards.Update(card);
+
+        return await _dbContext.SaveChangesAsync();
+    }
     #endregion
 }

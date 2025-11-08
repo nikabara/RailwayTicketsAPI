@@ -11,13 +11,15 @@ public class CreditCardService : ICreditCardService
     #region Properties
     private readonly ICreditCardRepository _creditCardRepository;
     private readonly ICreditCardIssuerRepository _creditCardIssuerRepository;
+    private readonly IUserRepository _userRepository;
     #endregion
 
     #region Constructors
-    public CreditCardService(ICreditCardRepository creditCardRepository, ICreditCardIssuerRepository creditCardIssuerRepository)
+    public CreditCardService(ICreditCardRepository creditCardRepository, ICreditCardIssuerRepository creditCardIssuerRepository, IUserRepository userRepository)
     {
         _creditCardRepository = creditCardRepository;
         _creditCardIssuerRepository = creditCardIssuerRepository;
+        _userRepository = userRepository;
     }
 
     #endregion
@@ -29,32 +31,80 @@ public class CreditCardService : ICreditCardService
 
         var targetCreditCardIssuer = await _creditCardIssuerRepository.GetCreditCardIssuer(creditCardDTO.CreditCardIssuerId);
 
+        var targetUser = await _userRepository.GetUserByID(creditCardDTO.UserId);
+
         if (targetCreditCardIssuer == null)
         {
             response.ErrorMessage = "Credit Card Issuer returned as null, cannot add credit card without a valid issuer";
             response.IsSuccess = false;
         }
+        else if (targetUser == null)
+        {
+            response.ErrorMessage = "User returned as null, cannot add credit card without a valid user";
+            response.IsSuccess = false;
+        }
         else
         {
-            var creditCard = new CreditCard
-            {
-                CreditCardIssuerId = creditCardDTO.CreditCardIssuerId,
-                ExpirationDate = creditCardDTO.ExpirationDate,
-                CVV = creditCardDTO.CVV,
-                CreditCardIssuer = targetCreditCardIssuer
-            };
+            var targetCard = await _creditCardRepository
+                .GetCreditCardByInfo(creditCardDTO.CreditCardNumber, creditCardDTO.CVV);
 
-            int? addedCreditCardId = await _creditCardRepository.AddCreditCard(creditCard);
+            CreditCard cardToProcess;
+            int? finalCreditCardId = null;
 
-            if (addedCreditCardId != null && addedCreditCardId > 0)
+            if (targetCard == null) // Card is New
             {
-                response.IsSuccess = true;
-                response.Data = addedCreditCardId;
+                cardToProcess = new CreditCard
+                {
+                    UserId = creditCardDTO.UserId,
+                    CreditCardIssuerId = creditCardDTO.CreditCardIssuerId,
+                    ExpirationDate = creditCardDTO.ExpirationDate,
+                    CVV = creditCardDTO.CVV,
+                    CreditCardNumber = creditCardDTO.CreditCardNumber,
+                    CreditCardIssuer = targetCreditCardIssuer,
+                    Users = new List<User> { targetUser }
+                };
+
+                finalCreditCardId = await _creditCardRepository.AddCreditCard(cardToProcess);
+
+                if (finalCreditCardId.HasValue && finalCreditCardId > 0)
+                {
+                    response.IsSuccess = true;
+                    response.Data = finalCreditCardId;
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.ErrorMessage = "Error adding new credit card and link";
+                }
             }
-            else
+            else // Card Exists (Shared Card)
             {
-                response.IsSuccess = false;
-                response.ErrorMessage = "Error adding credit card";
+                cardToProcess = targetCard;
+                finalCreditCardId = cardToProcess.CreditCardId;
+
+                if (cardToProcess.Users.Any(u => u.UserId == targetUser.UserId))
+                {
+                    response.IsSuccess = true;
+                    response.Data = finalCreditCardId;
+                    response.ErrorMessage = "Credit Card already linked to this user.";
+                }
+                else
+                {
+                    cardToProcess.Users.Add(targetUser);
+
+                    int rowsAffected = await _creditCardRepository.UpdateCreditCard(cardToProcess);
+
+                    if (rowsAffected > 0)
+                    {
+                        response.IsSuccess = true;
+                        response.Data = finalCreditCardId;
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.ErrorMessage = "Error establishing link for existing credit card.";
+                    }
+                }
             }
         }
 

@@ -25,7 +25,7 @@ public class User
     #region Configuation Properties 
     public virtual UserRole UserRole { get; set; } = new();
     public virtual List<Ticket> Tickets { get; set; } = new();
-    public virtual List<UserCreditCard> UserCreditCards { get; set; } = new();
+    public virtual List<CreditCard> CreditCards { get; set; } = new();
     public virtual List<Transaction> Transactions { get; set; } = new();
     #endregion
 }
