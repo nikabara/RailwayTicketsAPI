@@ -34,7 +34,7 @@ public class TrainScheduleService : ITrainScheduleService
             response.ErrorMessage = "Train returned as null, cannot add train schedule without a valid train";
             response.IsSuccess = false;
         }
-        else if (targetTrain != null)
+        else
         {
             var trainSchedule = new TrainSchedule
             {

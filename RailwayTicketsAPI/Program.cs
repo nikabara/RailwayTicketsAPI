@@ -67,6 +67,12 @@ builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
 
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 
+builder.Services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+
+builder.Services.AddScoped<ICreditCardService, CreditCardService>();
+
+builder.Services.AddScoped<ICreditCardIssuerRepository, CreditCardIssuerRepository>();
+
 #endregion
 
 #region External service registrations

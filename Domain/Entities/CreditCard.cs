@@ -7,7 +7,6 @@ public class CreditCard
     #region Properties
     [Key]
     public int CreditCardId { get; set; }
-    public int UserId { get; set; }
     public int CreditCardIssuerId { get; set; }
     public DateTime ExpirationDate { get; set; }
     public string CVV { get; set; } = string.Empty;
