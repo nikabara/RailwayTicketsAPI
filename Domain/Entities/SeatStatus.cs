@@ -3,16 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-public class Currency
+public class SeatStatus
 {
     #region Properties
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [Key]
-    public int CurrencyId { get; set; }
-    public string CurrencyName { get; set; } = string.Empty;
+    public int SeatStatusId { get; set; }
+    public string SeatStatusName { get; set; } = string.Empty;
     #endregion
 
     #region Navigation Properties
-    public virtual List<Transaction> Transactions { get; set; } = new();
+    public virtual List<Seat> Seats { get; set; } = new();
     #endregion
 }

@@ -11,8 +11,9 @@ public class Transaction
     public int UserId { get; set; }
     public int SeatId { get; set; }
     public int TrainScheduleId { get; set; }
+    public int CreditCardId { get; set; }
     public int CurrencyId { get; set; }
-    public decimal TransactionPrice { get; set; }
+    public decimal TransactionAmount { get; set; }
     public DateTime TransactionDate { get; set; }
     public bool IsActive { get; set; } = true;
     #endregion
@@ -23,5 +24,6 @@ public class Transaction
     public virtual Seat Seat { get; set; } = new();
     public virtual TrainSchedule TrainSchedule { get; set; } = new();
     public virtual Currency Currency { get; set; } = new();
+    public virtual CreditCard CreditCard { get; set; } = new();
     #endregion
 }

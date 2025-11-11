@@ -17,5 +17,9 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         builder.HasOne(t => t.User)
             .WithMany(u => u.Tickets)
             .HasForeignKey(fk => fk.UserId);
+
+        builder.HasOne(t => t.PaymentStatus)
+            .WithMany(ps => ps.Tickets)
+            .HasForeignKey(fk => fk.TicketPaymentStatusId);
     }
 }

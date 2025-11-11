@@ -77,6 +77,14 @@ builder.Services.AddScoped<IUserCreditCardRepository, UserCreditCardRepository>(
 
 builder.Services.AddScoped<IUserCreditCardService, UserCreditCardService>();
 
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+
+builder.Services.AddScoped<ISeatService, SeatService>();
+
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
 #endregion
 
 #region External service registrations

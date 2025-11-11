@@ -29,5 +29,9 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         builder.HasOne(t => t.Currency)
             .WithMany(s => s.Transactions)
             .HasForeignKey(fk => fk.CurrencyId);
+
+        builder.HasOne(t => t.CreditCard)
+            .WithMany(cc => cc.Transactions)
+            .HasForeignKey(fk => fk.CreditCardId);
     }
 }

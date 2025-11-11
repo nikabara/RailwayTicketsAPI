@@ -16,6 +16,7 @@ public class CreditCard
 
     #region Navigation Properties
     public virtual List<User> Users { get; set; } = new();
+    public virtual List<Transaction> Transactions { get; set; } = new();
     public virtual CreditCardIssuer CreditCardIssuer { get; set; } = new();
     #endregion
 }

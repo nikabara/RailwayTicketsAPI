@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace RailwayTicketsAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251111162933_minor rename of Transaction entity column TransactionPrice to TransactionAmount")]
+    partial class minorrenameofTransactionentitycolumnTransactionPricetoTransactionAmount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,20 +121,6 @@ namespace RailwayTicketsAPI.Migrations
                     b.ToTable("EmailTemplates");
                 });
 
-            modelBuilder.Entity("Domain.Entities.PaymentStatus", b =>
-                {
-                    b.Property<int>("PaymentStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PaymentStatusName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PaymentStatusId");
-
-                    b.ToTable("PaymentStatuses");
-                });
-
             modelBuilder.Entity("Domain.Entities.Seat", b =>
                 {
                     b.Property<int>("SeatId")
@@ -140,6 +129,9 @@ namespace RailwayTicketsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeatId"));
 
+                    b.Property<bool>("IsOccupied")
+                        .HasColumnType("bit");
+
                     b.Property<string>("SeatNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -147,33 +139,14 @@ namespace RailwayTicketsAPI.Migrations
                     b.Property<decimal>("SeatPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SeatStatusId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("VagonId")
                         .HasColumnType("int");
 
                     b.HasKey("SeatId");
 
-                    b.HasIndex("SeatStatusId");
-
                     b.HasIndex("VagonId");
 
                     b.ToTable("Seats");
-                });
-
-            modelBuilder.Entity("Domain.Entities.SeatStatus", b =>
-                {
-                    b.Property<int>("SeatStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SeatStatusName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SeatStatusId");
-
-                    b.ToTable("SeatStatuses");
                 });
 
             modelBuilder.Entity("Domain.Entities.Station", b =>
@@ -210,9 +183,6 @@ namespace RailwayTicketsAPI.Migrations
                     b.Property<int?>("SeatId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TicketPaymentStatusId")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("TicketPrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -222,8 +192,6 @@ namespace RailwayTicketsAPI.Migrations
                     b.HasKey("TicketId");
 
                     b.HasIndex("SeatId");
-
-                    b.HasIndex("TicketPaymentStatusId");
 
                     b.HasIndex("UserId");
 
@@ -287,9 +255,6 @@ namespace RailwayTicketsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
 
-                    b.Property<int>("CreditCardId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int");
 
@@ -315,8 +280,6 @@ namespace RailwayTicketsAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("TransactionId");
-
-                    b.HasIndex("CreditCardId");
 
                     b.HasIndex("CurrencyId");
 
@@ -494,18 +457,10 @@ namespace RailwayTicketsAPI.Migrations
 
             modelBuilder.Entity("Domain.Entities.Seat", b =>
                 {
-                    b.HasOne("Domain.Entities.SeatStatus", "SeatStatus")
-                        .WithMany("Seats")
-                        .HasForeignKey("SeatStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Vagon", "Vagon")
                         .WithMany("Seats")
                         .HasForeignKey("VagonId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("SeatStatus");
 
                     b.Navigation("Vagon");
                 });
@@ -516,15 +471,9 @@ namespace RailwayTicketsAPI.Migrations
                         .WithMany("Tickets")
                         .HasForeignKey("SeatId");
 
-                    b.HasOne("Domain.Entities.PaymentStatus", "PaymentStatus")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketPaymentStatusId");
-
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Tickets")
                         .HasForeignKey("UserId");
-
-                    b.Navigation("PaymentStatus");
 
                     b.Navigation("Seat");
 
@@ -542,12 +491,6 @@ namespace RailwayTicketsAPI.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("Domain.Entities.CreditCard", "CreditCard")
-                        .WithMany("Transactions")
-                        .HasForeignKey("CreditCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Currency", "Currency")
                         .WithMany("Transactions")
                         .HasForeignKey("CurrencyId")
@@ -577,8 +520,6 @@ namespace RailwayTicketsAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CreditCard");
 
                     b.Navigation("Currency");
 
@@ -611,11 +552,6 @@ namespace RailwayTicketsAPI.Migrations
                     b.Navigation("Train");
                 });
 
-            modelBuilder.Entity("Domain.Entities.CreditCard", b =>
-                {
-                    b.Navigation("Transactions");
-                });
-
             modelBuilder.Entity("Domain.Entities.CreditCardIssuer", b =>
                 {
                     b.Navigation("CreditCards");
@@ -626,21 +562,11 @@ namespace RailwayTicketsAPI.Migrations
                     b.Navigation("Transactions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.PaymentStatus", b =>
-                {
-                    b.Navigation("Tickets");
-                });
-
             modelBuilder.Entity("Domain.Entities.Seat", b =>
                 {
                     b.Navigation("Tickets");
 
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("Domain.Entities.SeatStatus", b =>
-                {
-                    b.Navigation("Seats");
                 });
 
             modelBuilder.Entity("Domain.Entities.Train", b =>

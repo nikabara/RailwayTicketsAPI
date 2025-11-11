@@ -1,5 +1,4 @@
-﻿using Application.DTOs.TicketDTOs;
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Application.Abstractions;
 

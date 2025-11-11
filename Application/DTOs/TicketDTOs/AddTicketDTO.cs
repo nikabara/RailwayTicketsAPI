@@ -6,4 +6,5 @@ public class AddTicketDTO
     public int SeatId { get; set; }
     public DateTime DateOfBooking { get; set; } = DateTime.Now; 
     public decimal TicketPrice { get; set; }
+    public int TicketPaymentStatusId { get; set; }
 }

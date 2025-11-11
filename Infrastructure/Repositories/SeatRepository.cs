@@ -23,6 +23,8 @@ public class SeatRepository : ISeatRepository
     {
         var result = default(int?);
 
+        seat.SeatStatus = null;
+
         await _dbContext.Seats.AddAsync(seat);
 
         var rowsAffected = await _dbContext.SaveChangesAsync();
@@ -90,9 +92,7 @@ public class SeatRepository : ISeatRepository
                 ? targetSeat.SeatPrice
                 : seat.SeatPrice;
 
-            targetSeat.IsOccupied = seat.IsOccupied == null
-                ? targetSeat.IsOccupied 
-                : seat.IsOccupied;
+            targetSeat.SeatStatusId = seat.SeatStatusId;
 
             var rowsAffected = await _dbContext.SaveChangesAsync();
             result = rowsAffected > 0;

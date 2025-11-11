@@ -28,4 +28,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<CreditCard> CreditCards { get; set; }
     public DbSet<CreditCardIssuer> CreditCardIssuers { get; set; }
+    public DbSet<SeatStatus> SeatStatuses { get; set; }
+    public DbSet<PaymentStatus> PaymentStatuses { get; set; }
 }

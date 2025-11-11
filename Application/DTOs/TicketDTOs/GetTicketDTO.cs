@@ -7,4 +7,6 @@ public class GetTicketDTO
     public int SeatId { get; set; }
     public DateTime DateOfBooking { get; set; }
     public decimal TicketPrice { get; set; }
+    public int TicketPaymentStatusId { get; set; }
+
 }

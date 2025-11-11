@@ -36,7 +36,9 @@ public class TrainScheduleRepository : ITrainScheduleRepository
     {
         var result = new TrainSchedule();
 
-        result = await _dbContext.TrainSchedule.FirstOrDefaultAsync(t => t.TrainScheduleId == id);
+        result = await _dbContext.TrainSchedule
+            .Include(t => t.Train)
+            .FirstOrDefaultAsync(t => t.TrainScheduleId == id);
 
         return result;
     }

@@ -10,4 +10,6 @@ public interface IUserService
     public Task<ServiceResponse<bool>> RemoveUser(int id);
     public Task<ServiceResponse<bool>> UpdateUser(UpdateUserDTO updateUserDTO);
     public Task<ServiceResponse<bool>> MakeUserAdmin(int userId);
+    public Task<ServiceResponse<decimal>> AddUserFunds(decimal amount, int userId);
+    public Task<ServiceResponse<decimal>> DeductUserFunds(decimal amount, int userId);
 }

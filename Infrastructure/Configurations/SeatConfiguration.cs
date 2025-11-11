@@ -14,5 +14,9 @@ public class SeatConfiguration : IEntityTypeConfiguration<Seat>
             .WithMany(v => v.Seats)
             .HasForeignKey(s => s.VagonId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(s => s.SeatStatus)
+            .WithMany(ss => ss.Seats)
+            .HasForeignKey(fk => fk.SeatStatusId);
     }
 }

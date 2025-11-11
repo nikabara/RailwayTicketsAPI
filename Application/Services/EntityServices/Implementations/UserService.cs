@@ -163,5 +163,100 @@ public class UserService : IUserService
         return response;
     }
 
+    /// <summary>
+    /// Add given funds to balance of the user with given id
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <param name="userId"></param>
+    /// <returns><b>decimal</b> amount of new updated balance</returns>
+    public async Task<ServiceResponse<decimal>> AddUserFunds(decimal amount, int userId)
+    {
+        var response = new ServiceResponse<decimal>();
+
+        var targetUser = await _userRepository.GetUserByID(userId);
+
+        if (targetUser == null)
+        {
+            response.ErrorMessage = $"User with id : {userId} not found";
+            response.IsSuccess = false;
+        }
+        else
+        {
+            var newBalance = targetUser.UserBalance + amount;
+
+            var isUpdated = await _userRepository.UpdateUser(new User
+            {
+                UserId = userId,
+                UserBalance = newBalance
+            });
+
+            if (isUpdated)
+            {
+                response.Data = newBalance;
+                response.IsSuccess = true;
+            }
+            else
+            {
+                response.ErrorMessage = "Error updating user balance";
+                response.IsSuccess = false;
+            }
+        }
+
+        return response;
+    }
+
+    /// <summary>
+    /// Deducts given funds from balance of the user with given id
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <param name="userId"></param>
+    /// <returns><b>decimal</b> amount of new updated balance</returns>
+    public async Task<ServiceResponse<decimal>> DeductUserFunds(decimal amount, int userId)
+    {
+        var response = new ServiceResponse<decimal>();
+
+        var targetUser = await _userRepository.GetUserByID(userId);
+
+        if (targetUser == null)
+        {
+            response.ErrorMessage = $"User with id : {userId} not found";
+            response.IsSuccess = false;
+        }
+        else
+        {
+            var newBalance = targetUser.UserBalance - amount;
+
+            var isUpdated = false;
+
+            if (newBalance > 0)
+            {
+                isUpdated = await _userRepository.UpdateUser(new User
+                {
+                    UserId = userId,
+                    UserBalance = newBalance
+                });
+            }
+            else
+            {
+                response.ErrorMessage = "Insufficient funds";
+                response.IsSuccess = false;
+                return response;
+            }
+
+            if (isUpdated)
+            {
+                response.Data = newBalance;
+                response.IsSuccess = true;
+            }
+            else
+            {
+                response.ErrorMessage = "Error updating user balance";
+                response.IsSuccess = false;
+            }
+        }
+
+        return response;
+    }
+
     #endregion
 }

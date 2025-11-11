@@ -40,7 +40,9 @@ public class TicketRepository : ITicketRepository
     {
         var result = new Ticket();
         
-        var ticket = await _dbContext.Tickets.FirstOrDefaultAsync(t => t.TicketId == id);
+        var ticket = await _dbContext.Tickets
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t => t.TicketId == id);
 
         if (ticket != null) result = ticket;
 
@@ -88,6 +90,8 @@ public class TicketRepository : ITicketRepository
                 targetTicket.UserId = ticket.UserId ?? targetTicket.UserId;
 
                 targetTicket.TicketPrice = ticket.TicketPrice ?? targetTicket.TicketPrice;
+
+                targetTicket.TicketPaymentStatusId = ticket.TicketPaymentStatusId ?? targetTicket.TicketPaymentStatusId;
 
                 _dbContext.Tickets.Update(targetTicket);
                 var rowsAffected = await _dbContext.SaveChangesAsync();

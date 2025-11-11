@@ -82,16 +82,16 @@ public class CreateVagonSeatsBusinessLogic
                 await _seatRepository.AddSeat(new Seat
                 {
                     VagonId = _vagon.VagonId,
-                    SeatNumber = getVagonSeatNumber(i),
+                    SeatNumber = GetVagonSeatNumber(i),
                     SeatPrice = seatPrice,
-                    IsOccupied = false,
-                    Vagon = _vagon
+                    SeatStatusId = (int)SeatStatuses.Available,
+                    Vagon = _vagon,
                 });
             }
         }
     }
 
-    private string getVagonSeatNumber(int index)
+    private string GetVagonSeatNumber(int index)
     {
         char[] letters = ['A', 'B', 'C', 'D'];
 
