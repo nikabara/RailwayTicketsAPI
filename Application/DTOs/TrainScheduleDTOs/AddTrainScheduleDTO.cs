@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs.TrainScheduleDTO;
+﻿namespace Application.DTOs.TrainScheduleDTOs;
 
 public class AddTrainScheduleDTO
 {

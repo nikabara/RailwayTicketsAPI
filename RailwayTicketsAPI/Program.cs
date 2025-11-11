@@ -73,6 +73,10 @@ builder.Services.AddScoped<ICreditCardService, CreditCardService>();
 
 builder.Services.AddScoped<ICreditCardIssuerRepository, CreditCardIssuerRepository>();
 
+builder.Services.AddScoped<IUserCreditCardRepository, UserCreditCardRepository>();
+
+builder.Services.AddScoped<IUserCreditCardService, UserCreditCardService>();
+
 #endregion
 
 #region External service registrations

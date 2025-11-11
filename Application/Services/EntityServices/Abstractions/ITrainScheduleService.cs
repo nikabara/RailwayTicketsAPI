@@ -1,4 +1,4 @@
-﻿using Application.DTOs.TrainScheduleDTO;
+﻿using Application.DTOs.TrainScheduleDTOs;
 using Domain.Common;
 
 namespace Application.Services.EntityServices.Abstractions;

@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions;
 using Application.DTOs.TrainDTOs;
-using Application.DTOs.TrainScheduleDTO;
+using Application.DTOs.TrainScheduleDTOs;
 using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Domain.Entities;

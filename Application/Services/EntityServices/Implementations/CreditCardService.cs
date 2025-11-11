@@ -130,7 +130,7 @@ public class CreditCardService : ICreditCardService
                 CreditCardIssuerId = creditCard.CreditCardIssuerId,
                 ExpirationDate = creditCard.ExpirationDate,
                 CVV = creditCard.CVV,
-                //CreditCardIssuer = creditCard.CreditCardIssuer
+                CreditCardNumber = creditCard.CreditCardNumber
             };
 
             response.IsSuccess = true;
