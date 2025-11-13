@@ -8,5 +8,5 @@ public class GetTicketDTO
     public DateTime DateOfBooking { get; set; }
     public decimal TicketPrice { get; set; }
     public int TicketPaymentStatusId { get; set; }
-
+    public string TicketNumber { get; set; } = string.Empty;
 }

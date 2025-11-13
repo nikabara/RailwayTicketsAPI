@@ -118,6 +118,10 @@ public class UserRepository : IUserRepository
                 ? targetUser.UserRoleId
                 : user.UserRoleId;
 
+            targetUser.UserBalance = user.UserBalance == default
+                ? targetUser.UserBalance
+                : user.UserBalance;
+
             result = true;
 
             await _dbContext.SaveChangesAsync();

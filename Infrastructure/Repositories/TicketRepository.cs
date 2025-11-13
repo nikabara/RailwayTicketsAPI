@@ -24,6 +24,8 @@ public class TicketRepository : ITicketRepository
     {
         var result = default(int);
 
+        ticket.TicketNumber = GenerateTicketNumber();
+
         await _dbContext.Tickets.AddAsync(ticket);
 
         var rowsAffected = await _dbContext.SaveChangesAsync();
@@ -43,6 +45,32 @@ public class TicketRepository : ITicketRepository
         var ticket = await _dbContext.Tickets
             .Include(t => t.User)
             .FirstOrDefaultAsync(t => t.TicketId == id);
+
+        if (ticket != null) result = ticket;
+
+        return result;
+    }
+
+    public async Task<Ticket?> GetTicketWithSeatAndUserId(int seatId, int userId)
+    {
+        Ticket? result = null;
+
+        var ticket = await _dbContext.Tickets
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t => t.SeatId == seatId && t.UserId == userId);
+        
+        if (ticket != null) result = ticket;
+        
+        return result;
+    }
+
+    public async Task<Ticket> GetTicketWithTicketNumber(string ticketNumber)
+    {
+        var result = new Ticket();
+
+        var ticket = await _dbContext.Tickets
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t => t.TicketNumber == ticketNumber);
 
         if (ticket != null) result = ticket;
 
@@ -93,6 +121,8 @@ public class TicketRepository : ITicketRepository
 
                 targetTicket.TicketPaymentStatusId = ticket.TicketPaymentStatusId ?? targetTicket.TicketPaymentStatusId;
 
+                ticket.TicketNumber = targetTicket.TicketNumber; // non-updatable
+
                 _dbContext.Tickets.Update(targetTicket);
                 var rowsAffected = await _dbContext.SaveChangesAsync();
                 result = rowsAffected > 0;
@@ -102,5 +132,7 @@ public class TicketRepository : ITicketRepository
         return result;
     }
 
+
+    private string GenerateTicketNumber() => Guid.NewGuid().ToString()[..36].ToUpper();
     #endregion
 }

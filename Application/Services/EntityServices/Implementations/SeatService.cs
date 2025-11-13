@@ -61,6 +61,7 @@ public class SeatService : ISeatService
         else
         {
             response.Data = true;
+            response.IsSuccess = true;
         }
 
         return response;

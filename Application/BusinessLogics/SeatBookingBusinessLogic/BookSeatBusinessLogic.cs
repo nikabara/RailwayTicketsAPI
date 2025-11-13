@@ -74,20 +74,12 @@ public class BookSeatBusinessLogic
             TransactionDate = DateTime.Now,
             IsActive = true,
             TransactionAmount = transactionAmount,
-            TransactionState = new TransactionState
-            {
-                TransactionStateId = (int)TransactionStateType.Successful,
-                TransactionStateName = TransactionStateType.Successful.ToString()
-            },
-            Currency = new Currency
-            {
-                CurrencyId = currencyId,
-                CurrencyName = Enum.GetName(typeof(CurrencyType), currencyId)!
-            },
-            TrainSchedule = targetTrainSchedule!,
-            User = targetUser!,
-            Seat = targetSeat!,
-            CreditCard = targetUser!.CreditCards.FirstOrDefault(cc => cc.CreditCardId == creditCardId)!
+            CreditCard = null,
+            Currency = null,
+            Seat = null,
+            TrainSchedule = null,
+            TransactionState = null,
+            User = null
         };
 
         var addedTransactionId = await _transactionRepository.AddTransaction(transaction);
@@ -111,7 +103,7 @@ public class BookSeatBusinessLogic
         {
             targetSeat = await _seatRepository.GetSeat(seatId);
 
-            if (targetSeat != null)
+            if (targetSeat != null && targetSeat.SeatStatusId != (int)SeatStatuses.Occupied && targetSeat.SeatStatusId != (int)SeatStatuses.Reserved)
             {
                 await _seatRepository.UpdateSeat(new Seat
                 {
@@ -119,72 +111,29 @@ public class BookSeatBusinessLogic
                     SeatStatusId = (int)SeatStatuses.Reserved
                 });
 
-                var ticket = new Ticket
+                var userTicketExists = await _ticketRepository.GetTicketWithSeatAndUserId(seatId, userId);
+
+                if (userTicketExists == null)
                 {
-                    UserId = userId,
-                    SeatId = seatId,
-                    DateOfBooking = DateTime.Now,
-                    TicketPrice = targetSeat.SeatPrice,
-                    User = targetUser,
-                    TicketPaymentStatusId = (int)TicketPaymentStatus.Pending
-                };
-
-                var addedTicketId = await _ticketRepository.AddTicket(ticket);
-
-                var userPaid = await _userService.DeductUserFunds(transactionAmount, userId);
-
-                if (!userPaid.IsSuccess)
-                {
-                    _result.IsError = true;
-                    _result.ErrorMessage = "Error processing payment";
-
-                    await _seatRepository.UpdateSeat(new Seat
+                    var ticket = new Ticket
                     {
+                        UserId = userId,
                         SeatId = seatId,
-                        SeatStatusId = (int)SeatStatuses.Available
-                    });
-                }
-                else if (addedTicketId == 0)
-                {
-                    _result.IsError = true;
-                    _result.ErrorMessage = "Error creating ticket";
+                        DateOfBooking = DateTime.Now,
+                        TicketPrice = targetSeat.SeatPrice,
+                        Seat = null,
+                        PaymentStatus = null,
+                        TicketPaymentStatusId = (int)TicketPaymentStatus.Pending
+                    };
 
-                    await _seatRepository.UpdateSeat(new Seat
-                    {
-                        SeatId = seatId,
-                        SeatStatusId = (int)SeatStatuses.Available
-                    });
-                }
-                else
-                {
-                    var isTicketUpdated = await _ticketRepository.UpdateTicket(new Ticket
-                    {
-                        TicketId = (int)addedTicketId,
-                        TicketPaymentStatusId = (int)TicketPaymentStatus.Completed
-                    });
+                    var addedTicketId = await _ticketRepository.AddTicket(ticket);
 
-                    var isSeatUpdated = await _seatRepository.UpdateSeat(new Seat
-                    {
-                        SeatId = seatId,
-                        SeatStatusId = (int)SeatStatuses.Occupied
-                    });
+                    var userPaid = await _userService.DeductUserFunds(targetSeat.SeatPrice, userId);
 
-                    if (isTicketUpdated && isSeatUpdated)
-                    {
-                        _result.IsError = false;
-                    }
-                    else
+                    if (!userPaid.IsSuccess)
                     {
                         _result.IsError = true;
-                        _result.ErrorMessage = "Error updating ticket status";
-
-                        await _userService.AddUserFunds(transactionAmount, userId);
-
-                        await _ticketRepository.UpdateTicket(new Ticket
-                        {
-                            TicketId = (int)addedTicketId,
-                            TicketPaymentStatusId = (int)TicketPaymentStatus.Canceled
-                        });
+                        _result.ErrorMessage = "Error processing payment";
 
                         await _seatRepository.UpdateSeat(new Seat
                         {
@@ -192,7 +141,84 @@ public class BookSeatBusinessLogic
                             SeatStatusId = (int)SeatStatuses.Available
                         });
                     }
+                    else if (addedTicketId == 0)
+                    {
+                        _result.IsError = true;
+                        _result.ErrorMessage = "Error creating ticket";
+
+                        await _seatRepository.UpdateSeat(new Seat
+                        {
+                            SeatId = seatId,
+                            SeatStatusId = (int)SeatStatuses.Available
+                        });
+                    }
+                    else
+                    {
+                        var isTicketUpdated = await _ticketRepository.UpdateTicket(new Ticket
+                        {
+                            TicketId = (int)addedTicketId,
+                            TicketPaymentStatusId = (int)TicketPaymentStatus.Completed
+                        });
+
+                        var isSeatUpdated = await _seatRepository.UpdateSeat(new Seat
+                        {
+                            SeatId = seatId,
+                            SeatStatusId = (int)SeatStatuses.Occupied
+                        });
+
+                        if (isTicketUpdated && isSeatUpdated)
+                        {
+                            _result.IsError = false;
+                        }
+                        else
+                        {
+                            _result.IsError = true;
+                            _result.ErrorMessage = "Error updating ticket status";
+
+                            await _userService.AddUserFunds(targetSeat.SeatPrice, userId);
+
+                            await _ticketRepository.UpdateTicket(new Ticket
+                            {
+                                TicketId = (int)addedTicketId,
+                                TicketPaymentStatusId = (int)TicketPaymentStatus.Canceled
+                            });
+
+                            await _seatRepository.UpdateSeat(new Seat
+                            {
+                                SeatId = seatId,
+                                SeatStatusId = (int)SeatStatuses.Available
+                            });
+                        }
+                    }
+                    
                 }
+                else
+                {
+                    _result.IsError = true;
+                    _result.ErrorMessage = $"User with ID {userId} already has a ticket for seat ID {seatId}";
+
+                    await _seatRepository.UpdateSeat(new Seat
+                    {
+                        SeatId = seatId,
+                        SeatStatusId = (int)SeatStatuses.Available
+                    });
+                }
+
+            }
+            else if (targetSeat == null)
+            {
+                _result.IsError = true;
+                _result.ErrorMessage = $"Seat with ID {seatId} was not found";
+            }
+            else if (targetSeat!.SeatStatusId == (int)SeatStatuses.Reserved)
+            {
+                _result.IsError = true;
+                _result.ErrorMessage = $"Seat with ID {seatId} is currently reserved";
+            }
+            else if (targetSeat!.SeatStatusId == (int)SeatStatuses.Occupied)
+            {
+                _result.IsError = true;
+                _result.ErrorMessage = $"Seat with ID {seatId} is already occupied";
             }
             else
             {

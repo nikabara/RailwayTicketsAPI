@@ -88,7 +88,7 @@ public class SeatRepository : ISeatRepository
                 ? targetSeat.SeatNumber
                 : seat.SeatNumber;
 
-            targetSeat.SeatPrice = seat.SeatPrice == null
+            targetSeat.SeatPrice = seat.SeatPrice == 0M
                 ? targetSeat.SeatPrice
                 : seat.SeatPrice;
 

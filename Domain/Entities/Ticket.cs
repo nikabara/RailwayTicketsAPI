@@ -4,6 +4,7 @@ public class Ticket
 {
     #region Properties
     public int TicketId { get; set; }
+    public string TicketNumber { get; set; } = string.Empty;
     public int? UserId { get; set; }
     public int? SeatId { get; set; }
     public DateTime? DateOfBooking { get; set; }

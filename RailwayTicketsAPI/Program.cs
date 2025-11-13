@@ -145,3 +145,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// PROGRAM HAS ERRORS
