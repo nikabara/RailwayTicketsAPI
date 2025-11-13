@@ -123,7 +123,8 @@ public class BookSeatBusinessLogic
                         TicketPrice = targetSeat.SeatPrice,
                         Seat = null,
                         PaymentStatus = null,
-                        TicketPaymentStatusId = (int)TicketPaymentStatus.Pending
+                        TicketPaymentStatusId = (int)TicketPaymentStatus.Pending,
+                        User = null
                     };
 
                     var addedTicketId = await _ticketRepository.AddTicket(ticket);
