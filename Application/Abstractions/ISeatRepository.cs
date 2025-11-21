@@ -8,4 +8,5 @@ public interface ISeatRepository
     public Task<bool> RemoveSeat(int id);
     public Task<Seat?> GetSeat(int id);
     public Task<bool> UpdateSeat(Seat seat);
+    public Task<List<Seat>> GetSeatsByVagonID(int id);
 }

@@ -3,6 +3,7 @@ using Application.BusinessLogics.SeatBookingBusinessLogic;
 using Application.DTOs.SeatDTOs;
 using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
+using Domain.Entities;
 
 namespace Application.Services.EntityServices.Implementations;
 
@@ -62,6 +63,67 @@ public class SeatService : ISeatService
         {
             response.Data = true;
             response.IsSuccess = true;
+        }
+
+        return response;
+    }
+
+    public async Task<ServiceResponse<List<GetSeatDTO>>> GetSeatsByVagonID(int vagonId)
+    {
+        var response = new ServiceResponse<List<GetSeatDTO>>();
+
+        var vagonSeats = await _seatRepository.GetSeatsByVagonID(vagonId);
+
+        if (vagonSeats == null)
+        {
+            response.ErrorMessage = "No seats found for the specified vagon ID.";
+            response.IsSuccess = false;
+        }
+        else
+        {
+            var seats = vagonSeats.Select(s => new GetSeatDTO
+            {
+                SeatId = s.SeatId,
+                VagonId = (int)s.VagonId!,
+                SeatNumber = s.SeatNumber,
+                SeatPrice = s.SeatPrice,
+                SeatStatusId = s.SeatStatusId
+            }).ToList();
+
+            response.Data = seats;
+            response.IsSuccess = true;
+        }
+
+        return response;
+    }
+
+    public async Task<ServiceResponse<bool>> RemoveAllVagonSeats(int vagonId)
+    {
+        var response = new ServiceResponse<bool>();
+
+        var vagonSeats = await _seatRepository.GetSeatsByVagonID(vagonId);
+
+        if (vagonSeats == null)
+        {
+            response.ErrorMessage = "No seats found for the specified vagon ID.";
+            response.IsSuccess = false;
+        }
+        else
+        {
+            foreach (var seat in vagonSeats)
+            {
+                var removalResult = await _seatRepository.RemoveSeat(seat.SeatId);
+
+                if (!removalResult)
+                {
+                    response.ErrorMessage += $" Failed to remove seat with ID {seat.SeatId},";
+                }
+            }
+
+            response.ErrorMessage = response.ErrorMessage.Trim([' ', ',']);
+
+            response.IsSuccess = true;
+            response.Data = true;
         }
 
         return response;

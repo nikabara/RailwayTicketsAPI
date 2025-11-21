@@ -36,6 +36,36 @@ namespace RailwayTicketsAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("get-all-vagon-seats/{vagonId:int}")]
+        public async Task<ActionResult<ServiceResponse<List<GetSeatDTO>>>> GetVagonSeats(int vagonId)
+        {
+            var response = await _seatService.GetSeatsByVagonID(vagonId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
+
+        [HttpDelete("delet-all-vagon-seats/{vagonId:int}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> RemoveAllVAgonSeats(int vagonId)
+        {
+            var response = await _seatService.RemoveAllVagonSeats(vagonId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
         #endregion
     }
 }

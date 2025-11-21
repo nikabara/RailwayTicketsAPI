@@ -46,6 +46,17 @@ public class SeatRepository : ISeatRepository
         return result;
     }
 
+    public async Task<List<Seat>> GetSeatsByVagonID(int id)
+    {
+        var result = new List<Seat>();
+
+        result = await _dbContext.Seats
+            .Where(s => s.VagonId == id)
+            .ToListAsync();
+
+        return result;
+    }
+
     public async Task<bool> RemoveSeat(int id)
     {
         var result = default(bool);
