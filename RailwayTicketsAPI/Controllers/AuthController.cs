@@ -26,6 +26,16 @@ namespace RailwayTicketsAPI.Controllers
         {
             var response = await _authService.LogIn(email, password);
 
+            //var cookiesOptions = new CookieOptions
+            //{
+            //    HttpOnly = true,
+            //    Secure = false,
+            //    SameSite = SameSiteMode.Unspecified,
+            //    Expires = DateTime.UtcNow.AddDays(1)
+            //};
+
+            //Response.Cookies.Append("jwt_access_token", response.Data, cookiesOptions);
+
             if (response.IsSuccess)
             {
                 return Ok(response);
@@ -76,6 +86,21 @@ namespace RailwayTicketsAPI.Controllers
         public async Task<ActionResult<ServiceResponse<bool>>> VerifyVerificationCode(string email, string code)
         {
             var response = await _authService.VerifyVerificationCode(email, code);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response + " " + response.ErrorMessage);
+            }
+        }
+
+        [HttpPost("is-user-admin/{userId:int}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> IsUserAdmin(int userId)
+        {
+            var response = await _authService.VerifyAdminUser(userId);
 
             if (response.IsSuccess)
             {

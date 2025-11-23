@@ -1,5 +1,7 @@
 ﻿using Application.DTOs.AuthDTOs;
+using Application.DTOs.UserDTO;
 using Domain.Common;
+using Domain.Entities;
 
 namespace Application.Services.AuthServices.Abstractions;
 
@@ -10,4 +12,5 @@ public interface IAuthService
     public Task<ServiceResponse<bool>> ResetPassword();
     public Task<ServiceResponse<bool>> SendVerificationCode(int userID);
     public Task<ServiceResponse<bool>> VerifyVerificationCode(string email, string code);
+    public Task<ServiceResponse<GetAdminUser>> VerifyAdminUser(int userId);
 }

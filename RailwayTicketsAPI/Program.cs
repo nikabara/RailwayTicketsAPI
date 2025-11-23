@@ -128,7 +128,25 @@ builder.Services.AddSwaggerGen(options =>
 
 #endregion
 
+#region CORS origin pass
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "_myAllowSpecificOrigins",
+    policy =>
+    {
+        // 1. Allow your Angular origin (http://localhost:4200)
+        policy.WithOrigins("http://localhost:4200")
+              // 2. Allow all headers (like Content-Type, Authorization)
+              .AllowAnyHeader()
+              // 3. Allow all HTTP methods (POST, GET, etc.)
+              .AllowAnyMethod();
+    });
+});
+#endregion
+
 var app = builder.Build();
+
+app.UseCors("_myAllowSpecificOrigins");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

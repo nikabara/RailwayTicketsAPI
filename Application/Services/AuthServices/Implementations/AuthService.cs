@@ -1,10 +1,12 @@
 ﻿using Application.Abstractions;
 using Application.Common;
 using Application.DTOs.AuthDTOs;
+using Application.DTOs.UserDTO;
 using Application.Services.AuthServices.Abstractions;
 using Application.Services.ExternalServices.EmailSendingService.Abstractions;
 using Domain.Common;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.BusinessLogics;
 using Microsoft.Extensions.Configuration;
 
@@ -152,6 +154,46 @@ public class AuthService : IAuthService
             {
                 response.IsSuccess = true;
                 response.Data = true;
+            }
+        }
+
+        return response;
+    }
+
+    public async Task<ServiceResponse<GetAdminUser>> VerifyAdminUser(int userId)
+    {
+        var response = new ServiceResponse<GetAdminUser>();
+
+        var targetUser = await _userRepository.GetUserByID(userId);
+
+        if (targetUser == null)
+        {
+            response.IsSuccess = false;
+            response.Data = null;
+        }
+        else
+        {
+            var user = new GetAdminUser
+            {
+                UserId = targetUser.UserId,
+                UserRoleName = Enum.GetName(typeof(UserRoleType), targetUser.UserRoleId) ?? "Unknown",
+            };
+
+            if (targetUser.UserRoleId == (int)UserRoleType.Admin)
+            {
+                response.IsSuccess = true;
+                response.Data = user;
+            }
+            else if (targetUser.UserRoleId == (int)UserRoleType.SuperAdmin)
+            {
+                response.IsSuccess = true;
+                response.Data = user;
+                response.ErrorMessage = "Operation authorized *NOTE* as user was SuperAdmin though not Admin";
+            }
+            else if (targetUser.UserRoleId == (int)UserRoleType.User)
+            {
+                response.IsSuccess = false;
+                response.Data = null;
             }
         }
 
