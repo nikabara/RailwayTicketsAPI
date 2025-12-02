@@ -13,4 +13,5 @@ public interface IAuthService
     public Task<ServiceResponse<bool>> SendVerificationCode(int userID);
     public Task<ServiceResponse<bool>> VerifyVerificationCode(string email, string code);
     public Task<ServiceResponse<GetAdminUser>> VerifyAdminUser(int userId);
+    public Task<ServiceResponse<bool>> IsUserVerified(int userId);
 }

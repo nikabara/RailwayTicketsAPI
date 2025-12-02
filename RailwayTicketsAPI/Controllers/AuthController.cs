@@ -111,6 +111,21 @@ namespace RailwayTicketsAPI.Controllers
                 return BadRequest(response + " " + response.ErrorMessage);
             }
         }
+
+        [HttpPost("is-user-verified/{userId:int}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> IsUserVerified(int userId)
+        {
+            var response = await _authService.IsUserVerified(userId);
+         
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response + " " + response.ErrorMessage);
+            }
+        }
         #endregion
     }
 }

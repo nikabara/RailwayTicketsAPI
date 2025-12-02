@@ -264,5 +264,24 @@ public class AuthService : IAuthService
 
         return result;
     }
+
+    public async Task<ServiceResponse<bool>> IsUserVerified(int userId)
+    {
+        var response = new ServiceResponse<bool>();
+        var targetUser = await _userRepository.GetUserByID(userId);
+        if (targetUser == null)
+        {
+            response.ErrorMessage = $"User with ID: {userId} was not found";
+            response.IsSuccess = false;
+            response.Data = false;
+        }
+        else
+        {
+            response.IsSuccess = true;
+            response.Data = targetUser.IsVerified;
+        }
+
+        return response;
+    }
     #endregion
 }
