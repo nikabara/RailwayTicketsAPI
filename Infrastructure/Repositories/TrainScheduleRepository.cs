@@ -32,6 +32,61 @@ public class TrainScheduleRepository : ITrainScheduleRepository
         return result;
     }
 
+    public async Task<List<TrainSchedule>> FilterTrainSchedules(TrainSchedule trainSchedule, string trainName, int? trainNumber)
+    {
+        // 1. Start with the base IQueryable
+        IQueryable<TrainSchedule> query = _dbContext.TrainSchedule.Include(t => t.Train);
+
+        // 2. Chain Where clauses based on non-null/non-default filter properties
+
+        // Filter by TrainId (assuming 0 is the default/non-filter value)
+        if (trainSchedule.TrainId > 0)
+        {
+            query = query.Where(ts => ts.TrainId == trainSchedule.TrainId);
+        }
+
+        // Filter by Destination (assuming null or empty string means no filter)
+        if (!string.IsNullOrEmpty(trainSchedule.DepartureFrom))
+        {
+            // Using Contains for partial match or Equals for exact match
+            query = query.Where(ts => ts.DepartureFrom.Contains(trainSchedule.DepartureFrom));
+        }
+
+        if (!string.IsNullOrEmpty(trainSchedule.ArrivalAt))
+        {
+            // Using Contains for partial match or Equals for exact match
+            query = query.Where(ts => ts.ArrivalAt.Contains(trainSchedule.ArrivalAt));
+        }
+
+        // Filter by Departure Time (assuming default DateTime means no filter)
+        // Note: You should handle DateTime comparisons carefully (e.g., filtering by date only)
+        if (trainSchedule.DepartureDate != default(DateTime) && trainSchedule.DepartureDate != null)
+        {
+            // Example: Filter schedules that depart on the specified date
+            query = query.Where(ts => ts.DepartureDate.Value.Date == trainSchedule.DepartureDate.Value.Date);
+        }
+
+        if (trainSchedule.ArrivalDate != default(DateTime) && trainSchedule.ArrivalDate != null)
+        {
+            // Example: Filter schedules that depart on the specified date
+            query = query.Where(ts => ts.ArrivalDate.Value.Date == trainSchedule.ArrivalDate.Value.Date);
+        }
+
+        if (!string.IsNullOrWhiteSpace(trainName))
+        {
+            query = query.Where(ts => ts.Train.TrainName == trainName);
+        }
+
+        if (trainNumber != null)
+        {
+            query = query.Where(ts => ts.Train.TrainNumber == trainNumber);
+        }
+
+        // 3. Execute the query and return the results
+        // ToListAsync() executes the SQL query against the database.
+        return await query.ToListAsync();
+    }
+
     public async Task<TrainSchedule?> GetTrainScheduleByID(int id)
     {
         var result = new TrainSchedule();
