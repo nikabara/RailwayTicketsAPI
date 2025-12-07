@@ -58,18 +58,42 @@ public class TrainScheduleRepository : ITrainScheduleRepository
             query = query.Where(ts => ts.ArrivalAt.Contains(trainSchedule.ArrivalAt));
         }
 
-        // Filter by Departure Time (assuming default DateTime means no filter)
-        // Note: You should handle DateTime comparisons carefully (e.g., filtering by date only)
+
         if (trainSchedule.DepartureDate != default(DateTime) && trainSchedule.DepartureDate != null)
         {
-            // Example: Filter schedules that depart on the specified date
-            query = query.Where(ts => ts.DepartureDate.Value.Date == trainSchedule.DepartureDate.Value.Date);
+            // Get angular UTC date value
+            DateTime incomingUtcDate = trainSchedule.DepartureDate.Value;
+
+            // Converting UTC to server local time
+            // E.g., 2025-12-06T20:00:00.000Z (from Angular) becomes 2025-12-07T00:00:00.000 (Local)
+            DateTime localFilterDate = incomingUtcDate.ToLocalTime();
+
+            // Defining local calendar start
+            DateTime localStartOfDay = localFilterDate.Date; // e.g., 2025-12-07 00:00:00
+
+            // Defining exclusive (24hr later) day
+            DateTime localEndOfDay = localStartOfDay.AddDays(1); // e.g., 2025-12-08 00:00:00
+
+            // Ranging to compare local time
+            query = query.Where(ts =>
+                ts.DepartureDate.Value >= localStartOfDay &&
+                ts.DepartureDate.Value < localEndOfDay
+            );
         }
 
         if (trainSchedule.ArrivalDate != default(DateTime) && trainSchedule.ArrivalDate != null)
         {
-            // Example: Filter schedules that depart on the specified date
-            query = query.Where(ts => ts.ArrivalDate.Value.Date == trainSchedule.ArrivalDate.Value.Date);
+            // Apply the exact same logic for the arrival date
+            DateTime incomingUtcDate = trainSchedule.ArrivalDate.Value;
+            DateTime localFilterDate = incomingUtcDate.ToLocalTime();
+
+            DateTime localStartOfDay = localFilterDate.Date;
+            DateTime localEndOfDay = localStartOfDay.AddDays(1);
+
+            query = query.Where(ts =>
+                ts.ArrivalDate.Value >= localStartOfDay &&
+                ts.ArrivalDate.Value < localEndOfDay
+            );
         }
 
         if (!string.IsNullOrWhiteSpace(trainName))

@@ -21,7 +21,7 @@ namespace RailwayTicketsAPI.Controllers
         #endregion
 
         #region Methods
-        [HttpPost]
+        [HttpPost("filter-trains-and-schedules")]
         public async Task<ActionResult<ServiceResponse<TrainAndScheduleFilterDTO>>> FilterTrainSchedule(TrainAndScheduleFilterDTO filterOptions)
         {
             var response = await _trainSheduleFilterService.Filter(filterOptions);
