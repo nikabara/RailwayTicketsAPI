@@ -32,14 +32,6 @@ public class TrainScheduleFilterService : ITrainScheduleFilterService
             TrainNumber = filterOptions.TrainNumber
         };
 
-        // Get filtered trains
-        var filteredTrains = await _trainRepository.GetTrainsByValue(train);
-
-        // Get trains which have no shcedules
-        var targetTrains = filteredTrains
-            .Where(t => !t.TrainSchedules.Any())
-            .ToList();
-
         TrainSchedule trainSchedule = new TrainSchedule
         {
             DepartureFrom = filterOptions.DepartureFrom,
@@ -75,18 +67,33 @@ public class TrainScheduleFilterService : ITrainScheduleFilterService
                 });
             }
 
-            foreach (var t in targetTrains)
+            // Only merge trains when train name or number is provided
+            if (trainSchedule.DepartureDate == null 
+                && trainSchedule.ArrivalDate == null 
+                && string.IsNullOrWhiteSpace(trainSchedule.DepartureFrom) 
+                && string.IsNullOrWhiteSpace(trainSchedule.ArrivalAt))
             {
-                mergedData.Add(new TrainAndScheduleFilterDTO
+                // Get filtered trains
+                var filteredTrains = await _trainRepository.GetTrainsByValue(train);
+
+                // Get trains which have no shcedules
+                var targetTrains = filteredTrains
+                    .Where(t => !t.TrainSchedules.Any())
+                    .ToList();
+
+                foreach (var t in targetTrains)
                 {
-                    TrainId = t.TrainId,
-                    TrainName = t.TrainName,
-                    TrainNumber = t.TrainNumber,
-                    DepartureFrom = string.Empty,
-                    ArrivalAt = string.Empty,
-                    DepartureDate = null,
-                    ArrivalDate = null
-                });
+                    mergedData.Add(new TrainAndScheduleFilterDTO
+                    {
+                        TrainId = t.TrainId,
+                        TrainName = t.TrainName,
+                        TrainNumber = t.TrainNumber,
+                        DepartureFrom = string.Empty,
+                        ArrivalAt = string.Empty,
+                        DepartureDate = null,
+                        ArrivalDate = null
+                    });
+                }
             }
 
             response.Data = mergedData;
