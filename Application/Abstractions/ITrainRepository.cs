@@ -8,4 +8,5 @@ public interface ITrainRepository
     public Task<Train?> GetTrainByID(int id);
     public Task<int?> AddTrain(Train train);
     public Task<bool> UpdateTrain(Train train);
+    public Task<List<Train>> GetTrainsByValue(Train train);
 }

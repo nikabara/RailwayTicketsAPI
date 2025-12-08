@@ -10,12 +10,14 @@ public class TrainScheduleFilterService : ITrainScheduleFilterService
 {
     #region Properties
     private readonly ITrainScheduleRepository _trainScheduleRepository;
+    private readonly ITrainRepository _trainRepository;
     #endregion
 
     #region Constructor
-    public TrainScheduleFilterService(ITrainScheduleRepository trainScheduleRepository)
+    public TrainScheduleFilterService(ITrainScheduleRepository trainScheduleRepository, ITrainRepository trainRepository)
     {
         _trainScheduleRepository = trainScheduleRepository;
+        _trainRepository = trainRepository;
     }
     #endregion
 
@@ -30,7 +32,13 @@ public class TrainScheduleFilterService : ITrainScheduleFilterService
             TrainNumber = filterOptions.TrainNumber
         };
 
-        //List<Train> targetTrains = await _trainService.GetTrainsByValue(train);
+        // Get filtered trains
+        var filteredTrains = await _trainRepository.GetTrainsByValue(train);
+
+        // Get trains which have no shcedules
+        var targetTrains = filteredTrains
+            .Where(t => !t.TrainSchedules.Any())
+            .ToList();
 
         TrainSchedule trainSchedule = new TrainSchedule
         {
@@ -57,12 +65,27 @@ public class TrainScheduleFilterService : ITrainScheduleFilterService
             {
                 mergedData.Add(new TrainAndScheduleFilterDTO
                 {
+                    TrainId = ts.Train!.TrainId,
                     TrainName = ts.Train!.TrainName,
                     TrainNumber = ts.Train.TrainNumber,
                     DepartureFrom = ts.DepartureFrom,
                     ArrivalAt = ts.ArrivalAt,
                     DepartureDate = ts.DepartureDate,
                     ArrivalDate = ts.ArrivalDate
+                });
+            }
+
+            foreach (var t in targetTrains)
+            {
+                mergedData.Add(new TrainAndScheduleFilterDTO
+                {
+                    TrainId = t.TrainId,
+                    TrainName = t.TrainName,
+                    TrainNumber = t.TrainNumber,
+                    DepartureFrom = string.Empty,
+                    ArrivalAt = string.Empty,
+                    DepartureDate = null,
+                    ArrivalDate = null
                 });
             }
 

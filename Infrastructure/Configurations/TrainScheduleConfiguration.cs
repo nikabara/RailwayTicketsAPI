@@ -12,6 +12,7 @@ public class TrainScheduleConfiguration : IEntityTypeConfiguration<TrainSchedule
 
         builder.HasOne(ts => ts.Train)
             .WithMany(t => t.TrainSchedules)
-            .HasForeignKey(fk => fk.TrainId);
+            .HasForeignKey(fk => fk.TrainId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -85,5 +85,22 @@ public class TrainRepository : ITrainRepository
 
         return result;
     }
+
+    public async Task<List<Train>> GetTrainsByValue(Train train)
+    {
+        IQueryable<Train> query = _dbContext.Trains;
+
+        if (!string.IsNullOrWhiteSpace(train.TrainName))
+        {
+            query = query.Where(t => t.TrainName!.Contains(train.TrainName!));
+        }
+
+        if (train.TrainNumber != null)
+        {
+            query = query.Where(t => t.TrainNumber == train.TrainNumber);
+        }
+
+        return await query.ToListAsync();
+    }
     #endregion
 }
