@@ -32,7 +32,7 @@ public class TrainScheduleRepository : ITrainScheduleRepository
         return result;
     }
 
-    public async Task<List<TrainSchedule>> FilterTrainSchedules(TrainSchedule trainSchedule, string trainName, int? trainNumber)
+    public async Task<List<TrainSchedule>> FilterSchedules(TrainSchedule trainSchedule, string trainName, int? trainNumber)
     {
         // 1. Start with the base IQueryable
         IQueryable<TrainSchedule> query = _dbContext.TrainSchedule.Include(t => t.Train);

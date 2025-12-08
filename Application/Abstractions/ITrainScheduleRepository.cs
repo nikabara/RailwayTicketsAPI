@@ -8,5 +8,5 @@ public interface ITrainScheduleRepository
     public Task<TrainSchedule?> GetTrainScheduleByID(int id);
     public Task<int?> AddTrainSchedule(TrainSchedule trainSchedule);
     public Task<bool> UpdateTrainSchedule(TrainSchedule trainSchedule);
-    public Task<List<TrainSchedule>> FilterTrainSchedules(TrainSchedule trainSchedule, string trainName, int? trainNumber);
+    public Task<List<TrainSchedule>> FilterSchedules(TrainSchedule trainSchedule, string trainName, int? trainNumber);
 }

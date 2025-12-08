@@ -5,5 +5,5 @@ namespace Application.Services.EntityServices.Abstractions;
 
 public interface ITrainScheduleFilterService
 {
-    public Task<ServiceResponse<List<TrainAndScheduleFilterDTO>>> Filter(TrainAndScheduleFilterDTO filterOptions);
+    public Task<ServiceResponse<List<ScheduleFilterDTO>>> Filter(ScheduleFilterDTO filterOptions);
 }

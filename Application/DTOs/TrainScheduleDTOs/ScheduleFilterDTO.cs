@@ -1,7 +1,8 @@
 ﻿namespace Application.DTOs.TrainScheduleDTOs;
 
-public class TrainAndScheduleFilterDTO
+public class ScheduleFilterDTO
 {
+    public int? ScheduleId { get; set; }
     public int? TrainId { get; set; }
     public string? TrainName { get; set; } = string.Empty;
     public int? TrainNumber { get; set; }

@@ -7,22 +7,22 @@ namespace RailwayTicketsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TrainsSchedulesFilterController : ControllerBase
+    public class ScheduleFilterController : ControllerBase
     {
         #region Properties
         private readonly ITrainScheduleFilterService _trainSheduleFilterService;
         #endregion
 
         #region Constructors
-        public TrainsSchedulesFilterController(ITrainScheduleFilterService trainSheduleFilterService)
+        public ScheduleFilterController(ITrainScheduleFilterService trainSheduleFilterService)
         {
             _trainSheduleFilterService = trainSheduleFilterService;
         }
         #endregion
 
         #region Methods
-        [HttpPost("filter-trains-and-schedules")]
-        public async Task<ActionResult<ServiceResponse<TrainAndScheduleFilterDTO>>> FilterTrainSchedule(TrainAndScheduleFilterDTO filterOptions)
+        [HttpPost("filter-schedules")]
+        public async Task<ActionResult<ServiceResponse<ScheduleFilterDTO>>> FilterSchedule(ScheduleFilterDTO filterOptions)
         {
             var response = await _trainSheduleFilterService.Filter(filterOptions);
 
