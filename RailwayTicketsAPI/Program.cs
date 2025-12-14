@@ -87,6 +87,10 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddScoped<ITrainScheduleFilterService, TrainScheduleFilterService>();
 
+builder.Services.AddScoped<IUserFilterRepository, UserFilterRepository>();
+
+builder.Services.AddScoped<IUserFilterService, UserFilterService>();
+
 #endregion
 
 #region External service registrations
