@@ -56,5 +56,21 @@ public class TransactionRepository : ITransactionRepository
         return result;
     }
 
+    public async Task<List<Transaction>> GetTransactionsByuserId(int userId)
+    {
+        var result = new List<Transaction>();
+
+        result = await _dbContext.Transactions
+            .Include(t => t.TrainSchedule)
+            .Include(t => t.Seat)
+            .Include(t => t.Currency)
+            .Include(t => t.TransactionState)
+            .Include(t => t.CreditCard)
+            .Where(t => t.UserId == userId)
+            .ToListAsync();
+
+        return result;
+    }
+
     #endregion
 }

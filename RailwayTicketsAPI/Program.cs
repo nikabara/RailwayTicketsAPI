@@ -85,6 +85,8 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+
 builder.Services.AddScoped<ITrainScheduleFilterService, TrainScheduleFilterService>();
 
 builder.Services.AddScoped<IUserFilterRepository, UserFilterRepository>();

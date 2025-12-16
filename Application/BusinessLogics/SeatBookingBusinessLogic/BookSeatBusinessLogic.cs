@@ -63,7 +63,7 @@ public class BookSeatBusinessLogic
     {
         var targetTrainSchedule = await _trainScheduleRepository.GetTrainScheduleByID(trainScheduleId);
 
-        var transaction = new Transaction
+        var transaction = new Domain.Entities.Transaction
         {
             TransactionStateId = (int)TransactionStateType.Successful,
             UserId = userId,
