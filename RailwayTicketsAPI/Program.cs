@@ -19,7 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
 #region Swagger builder.Services
 
 builder.Services.AddEndpointsApiExplorer();
@@ -82,6 +81,8 @@ builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<ISeatService, SeatService>();
 
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+builder.Services.AddScoped<ITicketService, TicketService>();
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 

@@ -68,6 +68,35 @@ public class SeatService : ISeatService
         return response;
     }
 
+    public async Task<ServiceResponse<GetSeatDTO>> GetSeatById(int seatId)
+    {
+        var response = new ServiceResponse<GetSeatDTO>();
+
+        var targetSeat = await _seatRepository.GetSeat(seatId);
+
+        if (targetSeat == null)
+        {
+            response.ErrorMessage = "No seat found";
+            response.IsSuccess = false;
+        }
+        else
+        {
+            var mappedSeat = new GetSeatDTO
+            {
+                SeatId = targetSeat.SeatId,
+                VagonId = targetSeat.VagonId,
+                SeatNumber = targetSeat.SeatNumber,
+                SeatPrice = targetSeat.SeatPrice,
+                SeatStatusId = targetSeat.SeatStatusId
+            };
+
+            response.Data = mappedSeat;
+            response.IsSuccess = true;
+        }
+
+        return response;
+    }
+
     public async Task<ServiceResponse<List<GetSeatDTO>>> GetSeatsByVagonID(int vagonId)
     {
         var response = new ServiceResponse<List<GetSeatDTO>>();

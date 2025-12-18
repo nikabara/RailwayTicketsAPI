@@ -66,6 +66,21 @@ namespace RailwayTicketsAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("get-seat/{seatId:int}")]
+        public async Task<ActionResult<ServiceResponse<GetSeatDTO>>> GetSeatById(int seatId)
+        {
+            var response = await _seatService.GetSeatById(seatId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
         #endregion
     }
 }
