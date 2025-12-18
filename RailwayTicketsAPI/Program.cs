@@ -93,6 +93,10 @@ builder.Services.AddScoped<IUserFilterRepository, UserFilterRepository>();
 
 builder.Services.AddScoped<IUserFilterService, UserFilterService>();
 
+builder.Services.AddScoped<ITrainFilterRepository, TrainFilterRepository>();
+
+builder.Services.AddScoped<ITrainFilterService, TrainFilterService>();
+
 #endregion
 
 #region External service registrations
