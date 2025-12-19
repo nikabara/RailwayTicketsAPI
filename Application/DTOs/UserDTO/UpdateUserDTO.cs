@@ -11,4 +11,5 @@ public class UpdateUserDTO
     public string? Email { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; } = string.Empty;
     public UserRoleType? UserRoleType { get; set; }
+    public bool isVerified { get; set; }
 }

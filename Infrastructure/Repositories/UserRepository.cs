@@ -110,7 +110,7 @@ public class UserRepository : IUserRepository
                 ? user.PhoneNumber
                 : targetUser.PhoneNumber;
 
-            targetUser.IsVerified = user.IsVerified == default
+            targetUser.IsVerified = user.IsVerified == false
                 ? targetUser.IsVerified
                 : user.IsVerified;
 
@@ -134,9 +134,9 @@ public class UserRepository : IUserRepository
     {
         var result = default(bool);
 
-        var targetUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
+        var targetUser = await _dbContext.Users.Include(r => r.UserRole).FirstOrDefaultAsync(u => u.UserId == id);
 
-        if (targetUser == null || targetUser.UserRoleId == (int)UserRoleType.Admin || targetUser.IsVerified == false)
+        if (targetUser == null || targetUser.UserRoleId == (int)UserRoleType.Admin /*|| targetUser.IsVerified == false*/) // Intentional for simplicity
         {
             result = false;
         }

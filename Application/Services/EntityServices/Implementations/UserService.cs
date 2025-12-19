@@ -124,7 +124,8 @@ public class UserService : IUserService
             Age = updateUserDTO.Age ?? default,
             PhoneNumber = updateUserDTO.PhoneNumber,
             Email = updateUserDTO.Email!,
-            UserRoleId = (int)updateUserDTO.UserRoleType
+            UserRoleId = (int)updateUserDTO.UserRoleType,
+            IsVerified = updateUserDTO.isVerified
         };
 
         bool isUserEdited = await _userRepository.UpdateUser(user);
