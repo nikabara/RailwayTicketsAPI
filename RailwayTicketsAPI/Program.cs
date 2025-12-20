@@ -98,6 +98,10 @@ builder.Services.AddScoped<ITrainFilterRepository, TrainFilterRepository>();
 
 builder.Services.AddScoped<ITrainFilterService, TrainFilterService>();
 
+builder.Services.AddScoped<IVagonFilterRepository, VagonFilterRepository>();
+
+builder.Services.AddScoped<IVagonFilterService, VagonFilterService>();
+
 #endregion
 
 #region External service registrations
