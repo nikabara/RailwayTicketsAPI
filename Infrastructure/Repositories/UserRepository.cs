@@ -52,6 +52,7 @@ public class UserRepository : IUserRepository
         result = await _dbContext.Users
             .Include(u => u.UserRole)
             .Include(u => u.CreditCards)
+            .Include(r => r.UserRole)
             .FirstOrDefaultAsync(u => u.Email == email);
 
         return result;

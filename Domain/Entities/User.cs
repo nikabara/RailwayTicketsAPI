@@ -23,7 +23,7 @@ public class User
     #endregion
 
     #region Configuation Properties 
-    public virtual UserRole UserRole { get; set; } = new();
+    public virtual UserRole UserRole { get; set; }
     public virtual List<Ticket> Tickets { get; set; } = new();
     public virtual List<CreditCard> CreditCards { get; set; } = new();
     public virtual List<Transaction> Transactions { get; set; } = new();

@@ -39,7 +39,7 @@ public class VagonRepository : IVagonRepository
     {
         var result = default(Vagon);
 
-        result = await _dbContext.Vagons.FirstOrDefaultAsync(v => v.VagonId == id);
+        result = await _dbContext.Vagons.Include(v => v.Seats).FirstOrDefaultAsync(v => v.VagonId == id);
 
         return result;
     }

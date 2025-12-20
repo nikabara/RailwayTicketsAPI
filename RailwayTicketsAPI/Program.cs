@@ -152,7 +152,7 @@ builder.Services.AddCors(options =>
     policy =>
     {
         // 1. Allow your Angular origin (http://localhost:4200)
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "http://localhost:4300")
               // 2. Allow all headers (like Content-Type, Authorization)
               .AllowAnyHeader()
               // 3. Allow all HTTP methods (POST, GET, etc.)

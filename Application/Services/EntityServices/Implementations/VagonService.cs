@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions;
 using Application.BusinessLogics.VagonBusinessLogics;
+using Application.DTOs.SeatDTOs;
 using Application.DTOs.VagonDTO;
 using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
@@ -113,7 +114,15 @@ public class VagonService : IVagonService
                 VagonId = vagon.VagonId,
                 TrainId = vagon.TrainId,
                 Capacity = vagon.Capacity,
-                VagonType = vagon.VagonType
+                VagonType = vagon.VagonType,
+                Seats = vagon.Seats?.Select(s => new GetSeatDTO
+                {
+                    SeatId = s.SeatId,
+                    VagonId = s.VagonId,
+                    SeatNumber = s.SeatNumber,
+                    SeatStatusId = s.SeatStatusId,
+                    SeatPrice = s.SeatPrice
+                }).ToList()
             };
 
             response.Data = vagonDTO;
