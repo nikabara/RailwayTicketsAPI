@@ -58,7 +58,7 @@ public class TrainRepository : ITrainRepository
     {
         var result = new Train();
 
-        result = await _dbContext.Trains.FirstOrDefaultAsync(t => t.TrainId == id);
+        result = await _dbContext.Trains.Include(v => v.Vagons).FirstOrDefaultAsync(t => t.TrainId == id);
 
         return result;
     }

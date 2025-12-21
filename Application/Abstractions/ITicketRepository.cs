@@ -10,4 +10,5 @@ public interface ITicketRepository
     public Task<Ticket> GetTicket(int id);
     public Task<Ticket> GetTicketWithTicketNumber(string ticketNumber);
     public Task<Ticket?> GetTicketWithSeatAndUserId(int seatId, int userId);
+    public Task<List<Ticket>> GetAllUserTickets(int userId);
 }

@@ -1,8 +1,6 @@
 ﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Infrastructure.Configurations;
+using Microsoft.EntityFrameworkCore;
 
 public class SeatConfiguration : IEntityTypeConfiguration<Seat>
 {
@@ -13,7 +11,8 @@ public class SeatConfiguration : IEntityTypeConfiguration<Seat>
         builder.HasOne(s => s.Vagon)
             .WithMany(v => v.Seats)
             .HasForeignKey(s => s.VagonId)
-            .OnDelete(DeleteBehavior.Restrict);
+            // CHANGE THIS LINE:
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(s => s.SeatStatus)
             .WithMany(ss => ss.Seats)

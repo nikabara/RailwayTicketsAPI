@@ -1,5 +1,7 @@
 ﻿using Application.Abstractions;
+using Application.DTOs.SeatDTOs;
 using Application.DTOs.TrainDTOs;
+using Application.DTOs.VagonDTO;
 using Application.Services.EntityServices.Abstractions;
 using Domain.Common;
 using Domain.Entities;
@@ -57,7 +59,22 @@ public class TrainService : ITrainService
             {
                 TrainId = train.TrainId,
                 TrainName = train.TrainName,
-                TrainNumber = train.TrainNumber
+                TrainNumber = train.TrainNumber,
+                Vagons = train.Vagons.Select(v => new GetVagonDTO
+                {
+                    VagonId = v.VagonId,
+                    TrainId = v.TrainId,
+                    Capacity = v.Capacity,
+                    VagonType = v.VagonType,
+                    Seats = v.Seats.Select(s => new GetSeatDTO
+                    {
+                        SeatId = s.SeatId,
+                        VagonId = s.VagonId,
+                        SeatNumber = s.SeatNumber,
+                        SeatPrice = s.SeatPrice,
+                        SeatStatusId = s.SeatStatusId
+                    }).ToList()
+                }).ToList()
             };
         
             response.IsSuccess = true;

@@ -16,10 +16,40 @@ public class TicketService : ITicketService
     {
         _ticketService = ticketService;
     }
-
     #endregion
 
-    #region
+    #region Methods
+    public async Task<ServiceResponse<List<GetTicketDTO>>> GetAllUserTickets(int userId)
+    {
+        var response = new ServiceResponse<List<GetTicketDTO>>();
+
+        var userTickets = await _ticketService.GetAllUserTickets(userId);
+
+        if (userTickets == null)
+        {
+            response.ErrorMessage = "User has no active tickets";
+            response.IsSuccess = false;
+        }
+        else
+        {
+            var mappedTickets = userTickets.Select(t => new GetTicketDTO
+            {
+                TicketId = t.TicketId,
+                UserId = t.UserId,
+                SeatId = t.SeatId,
+                DateOfBooking = t.DateOfBooking,
+                TicketPrice = t.TicketPrice,
+                TicketPaymentStatusId = t.TicketPaymentStatusId,
+                TicketNumber = t.TicketNumber
+            }).ToList();
+
+            response.IsSuccess = true;
+            response.Data = mappedTickets;
+        }
+
+        return response;
+    }
+
     public async Task<ServiceResponse<GetTicketDTO>> GetTicketByTicketNumber(string ticketNumber)
     {
         var response = new ServiceResponse<GetTicketDTO>();

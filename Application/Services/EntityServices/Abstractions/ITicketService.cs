@@ -6,4 +6,5 @@ namespace Application.Services.EntityServices.Abstractions;
 public interface ITicketService
 {
     public Task<ServiceResponse<GetTicketDTO>> GetTicketByTicketNumber(string ticketNumber);
+    public Task<ServiceResponse<List<GetTicketDTO>>> GetAllUserTickets(int userId);
 }

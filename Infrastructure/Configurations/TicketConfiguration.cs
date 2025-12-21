@@ -12,7 +12,8 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
 
         builder.HasOne(t => t.Seat)
             .WithMany(s => s.Tickets)
-            .HasForeignKey(fk => fk.SeatId);
+            .HasForeignKey(fk => fk.SeatId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(t => t.User)
             .WithMany(u => u.Tickets)

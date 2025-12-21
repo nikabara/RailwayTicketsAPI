@@ -12,4 +12,5 @@ public class UpdateUserDTO
     public string? PhoneNumber { get; set; } = string.Empty;
     public UserRoleType? UserRoleType { get; set; }
     public bool isVerified { get; set; }
+    public decimal UserBalance { get; set; }
 }

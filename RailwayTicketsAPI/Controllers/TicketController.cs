@@ -35,6 +35,21 @@ namespace RailwayTicketsAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpGet("get-all-user-tickets/{userId:int}")]
+        public async Task<ActionResult<ServiceResponse<List<GetTicketDTO>>>> GetAllUserTickets(int userId)
+        {
+            var response = await _ticketService.GetAllUserTickets(userId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
         #endregion
     }
 }

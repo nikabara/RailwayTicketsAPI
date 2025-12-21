@@ -38,6 +38,15 @@ public class TicketRepository : ITicketRepository
         return result;
     }
 
+    public async Task<List<Ticket>> GetAllUserTickets(int userId)
+    {
+        var result = await _dbContext.Tickets
+            .Where(t => t.UserId == userId)
+            .ToListAsync();
+
+        return result;
+    }
+
     public async Task<Ticket> GetTicket(int id)
     {
         var result = new Ticket();

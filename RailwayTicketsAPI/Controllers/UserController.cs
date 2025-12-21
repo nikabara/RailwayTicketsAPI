@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RailwayTicketsAPI.Controllers
 {
-    [Authorize(Roles = "Admin,SuperAdmin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -23,6 +22,7 @@ namespace RailwayTicketsAPI.Controllers
         #endregion
 
         #region Endpoints
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("admin/add-user")]
         public async Task<ActionResult<ServiceResponse<int>>> AddUser(AddUserDTO addUserDTO)
         {
@@ -38,6 +38,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("admin/get-user/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<GetUserDTO>>> GetUser(int userId)
         {
@@ -53,6 +54,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpDelete("admin/delete-user/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<bool>>> DeleteUser(int userId)
         {
@@ -68,6 +70,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "User")]
         [HttpPut("admin/update-user")]
         public async Task<ActionResult<ServiceResponse<bool>>> UpdateUser(UpdateUserDTO updateUserDTO)
         {

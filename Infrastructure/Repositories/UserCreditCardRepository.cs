@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using Application.DTOs.CreditCardDTOs;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,15 @@ public class UserCreditCardRepository : IUserCreditCardRepository
     #endregion
 
     #region Methods
+    public async Task<bool> AddCreditCard(CreditCard creditCard)
+    {
+        await _dbContext.CreditCards.AddAsync(creditCard);
+
+        int rowsChanged = await _dbContext.SaveChangesAsync();
+
+        return rowsChanged > 0;
+    }
+
     public async Task<List<CreditCard>?> GetUserCreditCards(int userId)
     {
         var result = new List<CreditCard>();
