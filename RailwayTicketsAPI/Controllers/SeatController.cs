@@ -37,6 +37,21 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
+        [HttpDelete("remove-seat/{seatId:int}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteSeat(int seatId)
+        {
+            var response = await _seatService.RemoveSeat(seatId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
+
         [HttpGet("get-all-vagon-seats/{vagonId:int}")]
         public async Task<ActionResult<ServiceResponse<List<GetSeatDTO>>>> GetVagonSeats(int vagonId)
         {

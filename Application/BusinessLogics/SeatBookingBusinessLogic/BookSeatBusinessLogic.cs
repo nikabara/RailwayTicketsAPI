@@ -61,7 +61,8 @@ public class BookSeatBusinessLogic
 
     private async Task AddTransactionToDB()
     {
-        var targetTrainSchedule = await _trainScheduleRepository.GetTrainScheduleByID(trainScheduleId);
+        // 12 is placeholder for now should be "trainScheduleId"
+        var targetTrainSchedule = await _trainScheduleRepository.GetTrainScheduleByID(12);
 
         var transaction = new Domain.Entities.Transaction
         {

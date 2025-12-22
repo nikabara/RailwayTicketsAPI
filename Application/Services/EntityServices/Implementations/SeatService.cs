@@ -68,6 +68,26 @@ public class SeatService : ISeatService
         return response;
     }
 
+    public async Task<ServiceResponse<bool>> RemoveSeat(int seatId)
+    {
+        var response = new ServiceResponse<bool>();
+
+        var isTrainRemoved = await _seatRepository.RemoveSeat(seatId);
+
+        if (isTrainRemoved)
+        {
+            response.Data = true;
+            response.IsSuccess = true;
+        }
+        else
+        {
+            response.Data = false;
+            response.IsSuccess = false;
+        }
+
+        return response;
+    }
+
     public async Task<ServiceResponse<GetSeatDTO>> GetSeatById(int seatId)
     {
         var response = new ServiceResponse<GetSeatDTO>();
@@ -157,6 +177,7 @@ public class SeatService : ISeatService
 
         return response;
     }
+
 
     #endregion
 }

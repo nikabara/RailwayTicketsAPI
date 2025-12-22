@@ -119,12 +119,14 @@ public class UserService : IUserService
         var user = new User
         {
             UserId = updateUserDTO.UserId,
-            Name = updateUserDTO.Name!,
-            LastName = updateUserDTO.LastName!,
-            Age = updateUserDTO.Age ?? default,
+            // Use the existing user's data or an empty string if the DTO value is null
+            Name = updateUserDTO.Name ?? string.Empty,
+            LastName = updateUserDTO.LastName ?? string.Empty,
+            Age = updateUserDTO.Age ?? 0,
             PhoneNumber = updateUserDTO.PhoneNumber,
-            Email = updateUserDTO.Email!,
-            UserRoleId = (int)updateUserDTO.UserRoleType!,
+            Email = updateUserDTO.Email ?? string.Empty,
+            // Ensure UserRoleType actually has a value before casting
+            UserRoleId = updateUserDTO.UserRoleType.HasValue ? (int)updateUserDTO.UserRoleType.Value : 0,
             IsVerified = updateUserDTO.isVerified,
             UserBalance = updateUserDTO.UserBalance
         };

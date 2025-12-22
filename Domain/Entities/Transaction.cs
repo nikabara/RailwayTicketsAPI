@@ -19,11 +19,11 @@ public class Transaction
     #endregion
 
     #region Navigation properties
-    public virtual TransactionState TransactionState { get; set; } = new();
-    public virtual User User { get; set; } = new();
-    public virtual Seat Seat { get; set; } = new();
-    public virtual TrainSchedule TrainSchedule { get; set; } = new();
-    public virtual Currency Currency { get; set; } = new();
-    public virtual CreditCard CreditCard { get; set; } = new();
+    public virtual TransactionState? TransactionState { get; set; }
+    public virtual User? User { get; set; }
+    public virtual Seat? Seat { get; set; }
+    public virtual TrainSchedule? TrainSchedule { get; set; }
+    public virtual Currency? Currency { get; set; }
+    public virtual CreditCard? CreditCard { get; set; }
     #endregion
 }

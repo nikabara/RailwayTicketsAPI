@@ -50,6 +50,21 @@ namespace RailwayTicketsAPI.Controllers
                 return BadRequest(response);
             }
         }
+
+        [HttpDelete("cancel-ticket/{ticketId:int}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> CancelTicket(int ticketId)
+        {
+            var response = await _ticketService.CancelTicket(ticketId);
+
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
         #endregion
     }
 }

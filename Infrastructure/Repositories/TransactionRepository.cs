@@ -25,8 +25,16 @@ public class TransactionRepository : ITransactionRepository
     {
         var result = default(int);
 
-        await _dbContext.Transactions.AddAsync(transaction);
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.Transactions.AddAsync(transaction);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
 
         result = transaction.TransactionId;
 

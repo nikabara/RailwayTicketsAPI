@@ -38,7 +38,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Admin,SuperAdmin")]
         [HttpGet("admin/get-user/{userId:int}")]
         public async Task<ActionResult<ServiceResponse<GetUserDTO>>> GetUser(int userId)
         {
@@ -70,7 +70,7 @@ namespace RailwayTicketsAPI.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Admin,SuperAdmin")]
         [HttpPut("admin/update-user")]
         public async Task<ActionResult<ServiceResponse<bool>>> UpdateUser(UpdateUserDTO updateUserDTO)
         {

@@ -81,5 +81,24 @@ public class TicketService : ITicketService
         return response;
     }
 
+    public async Task<ServiceResponse<bool>> CancelTicket(int ticketId)
+    {
+        var response = new ServiceResponse<bool>();
+
+        var isTicketDeleted = await _ticketService.RemoveTicket(ticketId);
+
+        if (isTicketDeleted)
+        {
+            response.Data = true;
+            response.IsSuccess = true;
+        }
+        else
+        {
+            response.Data = false;
+            response.IsSuccess = false;
+        }
+
+        return response;
+    }
     #endregion
 }

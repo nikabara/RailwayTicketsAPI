@@ -34,7 +34,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("UsersUserId");
 
-                    b.ToTable("CreditCardUser");
+                    b.ToTable("CreditCardUser", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CreditCard", b =>
@@ -66,7 +66,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("CreditCardIssuerId");
 
-                    b.ToTable("CreditCards");
+                    b.ToTable("CreditCards", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CreditCardIssuer", b =>
@@ -80,7 +80,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("CreditCardIssuerId");
 
-                    b.ToTable("CreditCardIssuers");
+                    b.ToTable("CreditCardIssuers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Currency", b =>
@@ -94,7 +94,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("CurrencyId");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.EmailTemplate", b =>
@@ -115,7 +115,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("EmailTemplateId");
 
-                    b.ToTable("EmailTemplates");
+                    b.ToTable("EmailTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentStatus", b =>
@@ -129,7 +129,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("PaymentStatusId");
 
-                    b.ToTable("PaymentStatuses");
+                    b.ToTable("PaymentStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Seat", b =>
@@ -159,7 +159,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("VagonId");
 
-                    b.ToTable("Seats");
+                    b.ToTable("Seats", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SeatStatus", b =>
@@ -173,7 +173,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("SeatStatusId");
 
-                    b.ToTable("SeatStatuses");
+                    b.ToTable("SeatStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Station", b =>
@@ -193,7 +193,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("StationId");
 
-                    b.ToTable("Stations");
+                    b.ToTable("Stations", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Ticket", b =>
@@ -231,7 +231,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Train", b =>
@@ -250,7 +250,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("TrainId");
 
-                    b.ToTable("Trains");
+                    b.ToTable("Trains", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TrainSchedule", b =>
@@ -280,7 +280,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("TrainId");
 
-                    b.ToTable("TrainSchedule");
+                    b.ToTable("TrainSchedule", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
@@ -332,7 +332,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TransactionState", b =>
@@ -346,7 +346,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("TransactionStateId");
 
-                    b.ToTable("TransactionStates");
+                    b.ToTable("TransactionStates", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -399,7 +399,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("UserRoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
@@ -416,7 +416,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("UserRoleId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Vagon", b =>
@@ -440,7 +440,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasIndex("TrainId");
 
-                    b.ToTable("Vagons");
+                    b.ToTable("Vagons", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.VerificationCode", b =>
@@ -467,7 +467,7 @@ namespace RailwayTicketsAPI.Migrations
 
                     b.HasKey("VerificationCodeId");
 
-                    b.ToTable("VerificationCodes");
+                    b.ToTable("VerificationCodes", (string)null);
                 });
 
             modelBuilder.Entity("CreditCardUser", b =>
