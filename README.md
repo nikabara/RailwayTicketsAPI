@@ -134,4 +134,4 @@ This project is licensed under the MIT License - see the [LICENSE](https://www.g
 
 ## 👥 Contributors
 
-* **Nika Barabadze** ([@nikabara](https://github.com/nikabara)) - Lead Developer
+* **Nika Baratashvili** ([@nikabara](https://github.com/nikabara)) - Lead Developer
