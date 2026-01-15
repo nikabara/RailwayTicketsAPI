@@ -81,7 +81,7 @@ The API will be available at `https://localhost:5001` (or the port specified in 
 
 ---
 
-## 🔌 API Endpoints
+## 🔌 API Endpoints (example)
 
 ### 🎫 Tickets
 
